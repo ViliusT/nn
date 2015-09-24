@@ -9,7 +9,11 @@ static int nn_(SpatialAveragePooling_updateOutput)(lua_State *L)
   int kH = luaT_getfieldcheckint(L, 1, "kH");
   int dW = luaT_getfieldcheckint(L, 1, "dW");
   int dH = luaT_getfieldcheckint(L, 1, "dH");
-  
+  int padW = luaT_getfieldcheckint(L, 1, "padW");
+  int padH = luaT_getfieldcheckint(L, 1, "padH");
+  int ceil_mode = luaT_getfieldcheckboolean(L,1,"ceil_mode");
+  int count_include_pad = luaT_getfieldcheckboolean(L,1,"count_include_pad");
+
   THTensor *output = luaT_getfieldcheckudata(L, 1, "output", torch_Tensor);
 
   real *output_data;
@@ -29,6 +33,7 @@ static int nn_(SpatialAveragePooling_updateOutput)(lua_State *L)
   long k;
 
   luaL_argcheck(L, input->nDimension == 3 || input->nDimension == 4, 2, "3D or 4D(batch mode) tensor expected");
+  luaL_argcheck(L, kW/2 >= padW && kH/2 >= padH, 2, "pad should be smaller than half of kernel size");
 
   if (input->nDimension == 4) {
     nbatch = input->size[0];
@@ -40,8 +45,17 @@ static int nn_(SpatialAveragePooling_updateOutput)(lua_State *L)
   inputWidth = input->size[dimw];
   inputHeight = input->size[dimh];
   nInputPlane = input->size[dimc];
-  outputWidth = (inputWidth - kW) / dW + 1;
-  outputHeight = (inputHeight - kH) / dH + 1;
+
+  if(ceil_mode)
+  {
+    outputWidth  = (long)(ceil((inputWidth  - kW + 2*padW) / dW)) + 1;
+    outputHeight = (long)(ceil((inputHeight - kH + 2*padH) / dH)) + 1;
+  }
+  else
+  {
+    outputWidth  = (long)(floor((inputWidth  - kW + 2*padW) / dW)) + 1;
+    outputHeight = (long)(floor((inputHeight - kH + 2*padH) / dH)) + 1;
+  }
 
   luaL_argcheck(L, inputWidth >= kW && inputHeight >= kH, 2, "input image smaller than kernel size");
 
@@ -64,6 +78,7 @@ static int nn_(SpatialAveragePooling_updateOutput)(lua_State *L)
       long xx, yy;
       /* For all output pixels... */
       real *ptr_output = output_data + p*nInputPlane*outputWidth*outputHeight + k*outputWidth*outputHeight;
+      real *ptr_input = input_data + p*nInputPlane*inputWidth*inputHeight + k*inputWidth*inputHeight;
       long i;
       for(i = 0; i < outputWidth*outputHeight; i++)
         ptr_output[i] = 0;
@@ -73,18 +88,30 @@ static int nn_(SpatialAveragePooling_updateOutput)(lua_State *L)
         for(xx = 0; xx < outputWidth; xx++)
         {
           /* Compute the mean of the input image... */
-          real *ptr_input = input_data + p*nInputPlane*inputWidth*inputHeight + k*inputWidth*inputHeight + yy*dH*inputWidth+xx*dW;
+          long hstart = yy * dH - padH;
+          long wstart = xx * dW - padW;
+          long hend = fminf(hstart + kH, inputHeight);
+          long wend = fminf(wstart + kW, inputWidth);
+          hstart = fmaxf(hstart, 0);
+          wstart = fmaxf(wstart, 0);
+
           real sum = 0;
+
+          long divide_factor;
+          if(count_include_pad)
+            divide_factor = kW*kH;
+          else
+            divide_factor = (hend - hstart) * (wend - wstart);
+
           long kx, ky;
 
-          for(ky = 0; ky < kH; ky++)
+          for(ky = hstart; ky < hend; ky++)
           {
-            for(kx = 0; kx < kW; kx++)
-              sum += ptr_input[kx];
-            ptr_input += inputWidth; /* next input line */
+            for(kx = wstart; kx < wend; kx++)
+              sum += ptr_input[ky*inputWidth + kx];
           }
           /* Update output */
-          *ptr_output++ += sum/(kW*kH);
+          *ptr_output++ += sum/divide_factor;
         }
       }
     }
@@ -102,6 +129,11 @@ static int nn_(SpatialAveragePooling_updateGradInput)(lua_State *L)
   int kH = luaT_getfieldcheckint(L, 1, "kH");
   int dW = luaT_getfieldcheckint(L, 1, "dW");
   int dH = luaT_getfieldcheckint(L, 1, "dH");
+  int padW = luaT_getfieldcheckint(L, 1, "padW");
+  int padH = luaT_getfieldcheckint(L, 1, "padH");
+  int ceil_mode = luaT_getfieldcheckboolean(L,1,"ceil_mode");
+  int count_include_pad = luaT_getfieldcheckboolean(L,1,"count_include_pad");
+
   THTensor *gradInput = luaT_getfieldcheckudata(L, 1, "gradInput", torch_Tensor);
 
   int dimw = 2;
@@ -130,8 +162,17 @@ static int nn_(SpatialAveragePooling_updateGradInput)(lua_State *L)
   inputWidth = input->size[dimw];
   inputHeight = input->size[dimh];
   nInputPlane = input->size[dimc];
-  outputWidth = (inputWidth - kW) / dW + 1;
-  outputHeight = (inputHeight - kH) / dH + 1;
+
+  if(ceil_mode)
+  {
+    outputWidth  = (long)(ceil((inputWidth  - kW + 2*padW) / dW)) + 1;
+    outputHeight = (long)(ceil((inputHeight - kH + 2*padH) / dH)) + 1;
+  }
+  else
+  {
+    outputWidth  = (long)(floor((inputWidth  - kW + 2*padW) / dW)) + 1;
+    outputHeight = (long)(floor((inputHeight - kH + 2*padH) / dH)) + 1;
+  }
 
   input_data = THTensor_(data)(input);
 
@@ -154,6 +195,8 @@ static int nn_(SpatialAveragePooling_updateGradInput)(lua_State *L)
       long xx, yy;
 
       real* ptr_gi = gradInput_data + p*nInputPlane*inputWidth*inputHeight + k*inputWidth*inputHeight;
+      real *ptr_gradInput = gradInput_data + p*nInputPlane*inputWidth*inputHeight + k*inputWidth*inputHeight;
+
       long i;
       for(i=0; i<inputWidth*inputHeight; i++)
         ptr_gi[i] = 0.0;
@@ -162,15 +205,26 @@ static int nn_(SpatialAveragePooling_updateGradInput)(lua_State *L)
       {
         for(xx = 0; xx < outputWidth; xx++)
         {
-          real *ptr_gradInput = gradInput_data + p*nInputPlane*inputWidth*inputHeight + k*inputWidth*inputHeight + yy*dH*inputWidth+xx*dW;
-          real z = *ptr_gradOutput++;
-          long kx, ky;
+          long hstart = yy * dH - padH;
+          long wstart = xx * dW - padW;
+          long hend = fminf(hstart + kH, inputHeight);
+          long wend = fminf(wstart + kW, inputWidth);
+          hstart = fmaxf(hstart, 0);
+          wstart = fmaxf(wstart, 0);
 
-          for(ky = 0; ky < kH; ky++)
+          real z = *ptr_gradOutput++;
+
+          long divide_factor;
+          if(count_include_pad)
+            divide_factor = kW*kH;
+          else
+            divide_factor = (hend - hstart) * (wend - wstart);
+
+          long kx, ky;
+          for(ky = hstart ; ky < hend; ky++)
           {
-            for(kx = 0; kx < kW; kx++)
-              ptr_gradInput[kx] += z/(kW*kH);
-            ptr_gradInput += inputWidth;
+            for(kx = wstart; kx < wend; kx++)
+              ptr_gradInput[ky*inputWidth + kx] += z/divide_factor;
           }
         }
       }
