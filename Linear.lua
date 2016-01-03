@@ -60,11 +60,11 @@ end
 function Linear:updateGradInput(input, gradOutput)
    if self.gradInput then
 
-      local nElement = self.gradInput:nElement()
-      self.gradInput:resizeAs(input)
-      if self.gradInput:nElement() ~= nElement then
-         self.gradInput:zero()
-      end
+  local nElement = self.gradInput:nElement()
+  self.gradInput:resizeAs(input)
+  if self.gradInput:nElement() ~= nElement then
+    self.gradInput:zero()
+  end
       if input:dim() == 1 then
          self.gradInput:addmv(0, 1, self.weight:t(), gradOutput)
       elseif input:dim() == 2 then
