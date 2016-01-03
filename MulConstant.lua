@@ -4,7 +4,7 @@ function MulConstant:__init(constant_scalar,ip)
   parent.__init(self)
   assert(type(constant_scalar) == 'number', 'input is not scalar!')
   self.constant_scalar = constant_scalar
-
+  
   -- default for inplace is false
   self.inplace = ip or false
   if (ip and type(ip) ~= 'boolean') then
