@@ -36,12 +36,12 @@ end
 
 function Container:training()
     self:applyToModules(function(module) module:training() end)
-    parent.training(self)
+  parent.training(self)
 end
 
 function Container:evaluate()
     self:applyToModules(function(module) module:evaluate() end)
-    parent.evaluate(self)
+  parent.evaluate(self)
 end
 
 function Container:share(mlp, ...)

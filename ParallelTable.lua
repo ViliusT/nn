@@ -42,7 +42,7 @@ function ParallelTable:__tostring__()
    local ext = '  |    '
    local extlast = '       '
    local last = '   ... -> '
-   local str = torch.type(self)
+  local str = torch.type(self)
    str = str .. ' {' .. line .. tab .. 'input'
    for i=1,#self.modules do
       if i == self.modules then

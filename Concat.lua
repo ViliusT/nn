@@ -1,7 +1,7 @@
 local Concat, parent = torch.class('nn.Concat', 'nn.Container')
 
 function Concat:__init(dimension)
-   parent.__init(self)
+  parent.__init(self)
    self.size = torch.LongStorage()
    self.dimension = dimension
 end
@@ -99,7 +99,7 @@ function Concat:__tostring__()
    local ext = '  |    '
    local extlast = '       '
    local last = '   ... -> '
-   local str = torch.type(self)
+  local str = torch.type(self)
    str = str .. ' {' .. line .. tab .. 'input'
    for i=1,#self.modules do
       if i == #self.modules then

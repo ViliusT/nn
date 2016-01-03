@@ -19,11 +19,11 @@ function nn.Jacobian.backward(module, input, param, dparam)
       sdout[i] = 1
       module:zeroGradParameters()
       local din = module:updateGradInput(input, dout)
-      module:accGradParameters(input, dout)
+    module:accGradParameters(input, dout)
       if doparam == 1 then
-         jacobian:select(2,i):copy(dparam)
+      jacobian:select(2,i):copy(dparam)
       else
-         jacobian:select(2,i):copy(din)
+      jacobian:select(2,i):copy(din)
       end
    end
    return jacobian

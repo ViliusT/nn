@@ -15,53 +15,53 @@ end
 
 local function retable(t1, t2, f)
    for k, v in ipairs(t2) do
-      if (torch.type(v) == "table") then
-         t1[k] = retable(t1[k] or {}, t2[k], f)
-      else
-         f(t1, k, v)
-      end
-   end
+    if (torch.type(v) == "table") then
+      t1[k] = retable(t1[k] or {}, t2[k], f)
+    else
+      f(t1, k, v)
+    end
+  end
    for i=#t2+1, #t1 do
       t1[i] = nil
    end
-   return t1
+  return t1
 end
 
 function ConcatTable:updateGradInput(input, gradOutput)
-   local isTable = torch.type(input) == 'table'
-   local wasTable = torch.type(self.gradInput) == 'table'
-   if isTable then
-      for i,module in ipairs(self.modules) do
-         local currentGradInput = module:updateGradInput(input, gradOutput[i])
-         if torch.type(currentGradInput) ~= 'table' then
-            error"currentGradInput is not a table!"
-         end
-         if #input ~= #currentGradInput then
-            error("table size mismatch: "..#input.." ~= "..#currentGradInput)
-         end
-         if i == 1 then
-            self.gradInput = wasTable and self.gradInput or {}
-            retable(self.gradInput, currentGradInput,
-               function(t, k, v)
-                  t[k] = t[k] or v:clone()
-                  t[k]:resizeAs(v)
-                  t[k]:copy(v)
-               end
-            )
-         else
-            retable(self.gradInput, currentGradInput,
-               function(t, k, v)
-                  t[k]:add(v)
-               end
-            )
-         end
+  local isTable = torch.type(input) == 'table'
+  local wasTable = torch.type(self.gradInput) == 'table'
+  if isTable then
+    for i,module in ipairs(self.modules) do
+      local currentGradInput = module:updateGradInput(input, gradOutput[i])
+      if torch.type(currentGradInput) ~= 'table' then
+        error"currentGradInput is not a table!"
       end
-   else
-      self.gradInput = (not wasTable) and self.gradInput or input:clone()
-      for i,module in ipairs(self.modules) do
-         local currentGradInput = module:updateGradInput(input, gradOutput[i])
-         if i == 1 then
-            self.gradInput:resizeAs(currentGradInput):copy(currentGradInput)
+      if #input ~= #currentGradInput then
+        error("table size mismatch: "..#input.." ~= "..#currentGradInput)
+      end
+      if i == 1 then
+        self.gradInput = wasTable and self.gradInput or {}
+        retable(self.gradInput, currentGradInput,
+          function(t, k, v)
+            t[k] = t[k] or v:clone()
+            t[k]:resizeAs(v)
+            t[k]:copy(v)
+          end
+        )
+         else
+        retable(self.gradInput, currentGradInput,
+          function(t, k, v)
+            t[k]:add(v)
+          end
+        )
+         end
+    end
+  else
+    self.gradInput = (not wasTable) and self.gradInput or input:clone()
+    for i,module in ipairs(self.modules) do
+      local currentGradInput = module:updateGradInput(input, gradOutput[i])
+      if i == 1 then
+        self.gradInput:resizeAs(currentGradInput):copy(currentGradInput)
          else
             self.gradInput:add(currentGradInput)
          end
@@ -96,7 +96,7 @@ function ConcatTable:__tostring__()
    local ext = '  |    '
    local extlast = '       '
    local last = '   ... -> '
-   local str = torch.type(self)
+  local str = torch.type(self)
    str = str .. ' {' .. line .. tab .. 'input'
    for i=1,#self.modules do
       if i == self.modules then

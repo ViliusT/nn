@@ -21,7 +21,7 @@ function LookupTable:backCompatibility()
 end
 
 function LookupTable:accUpdateOnly()
-   self.gradWeight = nil
+  self.gradWeight = nil
    return self
 end
 
@@ -36,22 +36,22 @@ function LookupTable:reset(stdv)
 end
 
 function LookupTable:makeInputContiguous(input)
-   -- make sure input is a contiguous torch.LongTensor
+  -- make sure input is a contiguous torch.LongTensor
    if (not input:isContiguous()) or torch.type(input) ~= torch.type(self._input) then
-      self.copiedInput = true
+    self.copiedInput = true
       self._input:resize(input:size()):copy(input)
       return self._input
-   end
-   self.copiedInput = false
+  end
+  self.copiedInput = false
    return input
 end
 
 function LookupTable:updateOutput(input)
    self:backCompatibility()
    input = self:makeInputContiguous(input)
-   if input:dim() == 1 then
+  if input:dim() == 1 then
       self.output:index(self.weight, 1, input)
-   elseif input:dim() == 2 then
+  elseif input:dim() == 2 then
       self.output:index(self.weight, 1, input:view(-1))
       self.output = self.output:view(input:size(1), input:size(2), self.weight:size(2))
    else
@@ -73,7 +73,7 @@ end
 
 function LookupTable:type(type, tensorCache)
    parent.type(self, type, tensorCache)
-
+  
    if type == 'torch.CudaTensor' then
       -- CUDA uses _sorted and _indices temporary tensors
       self._sorted = self.weight.new()

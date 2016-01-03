@@ -2,7 +2,7 @@ local CosineEmbeddingCriterion, parent = torch.class('nn.CosineEmbeddingCriterio
 
 function CosineEmbeddingCriterion:__init(margin)
    parent.__init(self)
-   margin = margin or 0
+  margin = margin or 0
    self.margin = margin 
    self.gradInput = {torch.Tensor(), torch.Tensor()}
   self.sizeAverage = true

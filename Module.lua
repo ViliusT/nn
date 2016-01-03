@@ -82,11 +82,11 @@ function Module:updateParameters(learningRate)
 end
 
 function Module:training()
-   self.train = true
+  self.train = true
 end
 
 function Module:evaluate()
-   self.train = false
+  self.train = false
 end
 
 function Module:share(mlp, ...)
@@ -327,24 +327,24 @@ end
 
 -- returns a list of modules
 function Module:listModules()
-   local function tinsert(to, from)
-      if torch.type(from) == 'table' then
-         for i=1,#from do
-            tinsert(to,from[i])
-         end
-      else
-         table.insert(to,from)
+  local function tinsert(to, from)
+    if torch.type(from) == 'table' then
+      for i=1,#from do
+        tinsert(to,from[i])
       end
-   end
-   -- include self first
-   local modules = {self}
-   if self.modules then
-      for i=1,#self.modules do
-         local modulas = self.modules[i]:listModules()
-         if modulas then
-            tinsert(modules,modulas)
-         end
+    else
+      table.insert(to,from)
+    end
+  end
+  -- include self first
+  local modules = {self}
+  if self.modules then
+    for i=1,#self.modules do
+      local modulas = self.modules[i]:listModules()
+      if modulas then
+        tinsert(modules,modulas)
       end
-   end
-   return modules
+    end
+  end
+  return modules
 end

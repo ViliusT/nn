@@ -14,13 +14,13 @@ function Sequential:add(module)
 end
 
 function Sequential:insert(module, index)
-   index = index or (#self.modules + 1)
+  index = index or (#self.modules + 1)
    if index > (#self.modules + 1) or index < 1 then
-      error"index should be contiguous to existing modules"
-   end
-   table.insert(self.modules, index, module)
-   self.output = self.modules[#self.modules].output
-   self.gradInput = self.modules[1].gradInput
+    error"index should be contiguous to existing modules"
+  end
+  table.insert(self.modules, index, module)
+  self.output = self.modules[#self.modules].output
+  self.gradInput = self.modules[1].gradInput
 end
 
 function Sequential:remove(index)

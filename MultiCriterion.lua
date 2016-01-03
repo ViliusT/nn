@@ -24,17 +24,17 @@ function MultiCriterion:updateOutput(input, target)
 end
 
 function MultiCriterion:updateGradInput(input, target)
-   self.gradInput = nn.utils.recursiveResizeAs(self.gradInput, input)
-   nn.utils.recursiveFill(self.gradInput, 0)
+  self.gradInput = nn.utils.recursiveResizeAs(self.gradInput, input)
+  nn.utils.recursiveFill(self.gradInput, 0)
    for i=1,#self.criterions do
-      nn.utils.recursiveAdd(self.gradInput, self.weights[i], self.criterions[i]:updateGradInput(input, target))
+    nn.utils.recursiveAdd(self.gradInput, self.weights[i], self.criterions[i]:updateGradInput(input, target))
    end
    return self.gradInput
 end
 
 function MultiCriterion:type(type)
-   for i,criterion in ipairs(self.criterions) do
-      criterion:type(type)
-   end
-   return parent.type(self, type)
+  for i,criterion in ipairs(self.criterions) do
+    criterion:type(type)
+  end
+  return parent.type(self, type)
 end

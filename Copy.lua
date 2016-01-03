@@ -4,13 +4,13 @@ function Copy:__init(intype, outtype, forceCopy, dontCast)
   intype = intype or torch.Tensor.__typename
   outtype = outtype or torch.Tensor.__typename
 
-   self.dontCast = dontCast
+  self.dontCast = dontCast
 
    parent.__init(self)
    self.gradInput = torch.getmetatable(intype).new()
    self.output = torch.getmetatable(outtype).new()
 
-   if (not forceCopy) and intype == outtype then
+  if (not forceCopy) and intype == outtype then
 
       self.updateOutput = function(self, input)
                         self.output = input
@@ -36,7 +36,7 @@ end
 
 function Copy:type(type, tensorCache)
    if type and self.dontCast then
-      return self
-   end
+    return self
+  end
    return parent.type(self, type, tensorCache)
 end
