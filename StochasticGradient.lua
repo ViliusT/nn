@@ -7,7 +7,7 @@ function StochasticGradient:__init(module, criterion)
    self.shuffleIndices = true
    self.module = module
    self.criterion = criterion
-   self.verbose = true
+  self.verbose = true
 end
 
 function StochasticGradient:train(dataset)
@@ -42,20 +42,20 @@ function StochasticGradient:train(dataset)
          end
       end
 
-      currentError = currentError / dataset:size()
-
+    currentError = currentError / dataset:size()
+    
       if self.hookIteration then
-         self.hookIteration(self, iteration, currentError)
+      self.hookIteration(self, iteration, currentError)
       end
 
-      if self.verbose then
-         print("# current error = " .. currentError)
-      end
+    if self.verbose then
+      print("# current error = " .. currentError)
+    end
       iteration = iteration + 1
       currentLearningRate = self.learningRate/(1+iteration*self.learningRateDecay)
       if self.maxIteration > 0 and iteration > self.maxIteration then
          print("# StochasticGradient: you have reached the maximum number of iterations")
-         print("# training error = " .. currentError)
+      print("# training error = " .. currentError)
          break
       end
    end
