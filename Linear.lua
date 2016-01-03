@@ -39,11 +39,11 @@ if input:dim() == 1 then
   self.output:addmv(1, self.weight, input)
 elseif input:dim() == 2 then
   local nframe = input:size(1)
-      local nElement = self.output:nElement()
+  local nElement = self.output:nElement()
   self.output:resize(nframe, self.bias:size(1))
-      if self.output:nElement() ~= nElement then
-         self.output:zero()
-      end
+  if self.output:nElement() ~= nElement then
+    self.output:zero()
+  end
       self.addBuffer = self.addBuffer or input.new()
       if self.addBuffer:nElement() ~= nframe then
          self.addBuffer:resize(nframe):fill(1)
