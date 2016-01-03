@@ -4601,16 +4601,16 @@ criterionJacobianTest1DTable(crit,v,t)
 end
 
 function nntest.HingeEmbeddingCriterion()
-  local x = torch.Tensor{0.3,2.1,1.8,0}
-  local y = torch.Tensor{1,-1,-1,1}
-  local expgrads = torch.Tensor{1,0,-1,1} / 4
+local x = torch.Tensor{0.3,2.1,1.8,0}
+local y = torch.Tensor{1,-1,-1,1}
+local expgrads = torch.Tensor{1,0,-1,1} / 4
 
-  local crit = nn.HingeEmbeddingCriterion(2)
-  local output = crit:forward(x, y) -- must be called before backward
-  local grads = crit:backward(x, y)
+local crit = nn.HingeEmbeddingCriterion(2)
+local output = crit:forward(x, y) -- must be called before backward
+local grads = crit:backward(x, y)
 
-  mytester:assert(math.abs(output - (0.3 + 0.2) / 4) < 1e-10)
-  equal(grads, expgrads)
+mytester:assert(math.abs(output - (0.3 + 0.2) / 4) < 1e-10)
+equal(grads, expgrads)
 end
 
 function nntest.Replicate()
