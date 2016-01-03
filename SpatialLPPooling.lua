@@ -16,8 +16,8 @@ function SpatialLPPooling:__init(nInputPlane, pnorm, kW, kH, dW, dH)
    else
       self:add(nn.Power(pnorm))
    end
-   self:add(nn.SpatialAveragePooling(kW, kH, dW, dH))
-   self:add(nn.MulConstant(kW*kH))
+  self:add(nn.SpatialAveragePooling(kW, kH, dW, dH))
+  self:add(nn.MulConstant(kW*kH))
    if pnorm == 2 then
       self:add(nn.Sqrt())
    else

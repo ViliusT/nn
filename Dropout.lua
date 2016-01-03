@@ -4,7 +4,7 @@ function Dropout:__init(p,v1,inplace)
    Parent.__init(self)
    self.p = p or 0.5
    self.train = true
-   self.inplace = inplace
+  self.inplace = inplace
    -- version 2 scales output during training instead of evaluation
    self.v2 = not v1
    if self.p >= 1 or self.p < 0 then
@@ -14,11 +14,11 @@ function Dropout:__init(p,v1,inplace)
 end
 
 function Dropout:updateOutput(input)
-   if self.inplace then 
-      self.output = input
-   else
-      self.output:resizeAs(input):copy(input)
-   end
+  if self.inplace then
+    self.output = input
+  else
+    self.output:resizeAs(input):copy(input)
+  end
    if self.train then
       self.noise:resizeAs(input)
       self.noise:bernoulli(1-self.p)
@@ -34,11 +34,11 @@ end
 
 function Dropout:updateGradInput(input, gradOutput)
    if self.train then
-      if self.inplace then
-         self.gradInput = gradOutput
-      else
-         self.gradInput:resizeAs(gradOutput):copy(gradOutput)
-      end
+    if self.inplace then
+      self.gradInput = gradOutput
+    else
+      self.gradInput:resizeAs(gradOutput):copy(gradOutput)
+    end
       self.gradInput:cmul(self.noise) -- simply mask the gradients with the noise vector
    else
       error('backprop only defined while training')

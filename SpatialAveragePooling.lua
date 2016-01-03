@@ -11,7 +11,7 @@ function SpatialAveragePooling:__init(kW, kH, dW, dH, padW, padH)
   self.padH = padH or 0
   self.ceil_mode = false
   self.count_include_pad = true
-   self.divide = true
+  self.divide = true
 end
 
 function SpatialAveragePooling:ceil()
@@ -45,23 +45,23 @@ end
 
 function SpatialAveragePooling:updateOutput(input)
   backwardCompatible(self)
-   input.nn.SpatialAveragePooling_updateOutput(self, input)
-   -- for backward compatibility with saved models
-   -- which are not supposed to have "divide" field
-   if not self.divide then
-     self.output:mul(self.kW*self.kH)
-   end
-   return self.output
+  input.nn.SpatialAveragePooling_updateOutput(self, input)
+  -- for backward compatibility with saved models
+  -- which are not supposed to have "divide" field
+  if not self.divide then
+    self.output:mul(self.kW*self.kH)
+  end
+  return self.output
 end
 
 function SpatialAveragePooling:updateGradInput(input, gradOutput)
    if self.gradInput then
-      input.nn.SpatialAveragePooling_updateGradInput(self, input, gradOutput)
-      -- for backward compatibility
-      if not self.divide then
+    input.nn.SpatialAveragePooling_updateGradInput(self, input, gradOutput)
+    -- for backward compatibility
+    if not self.divide then
       self.gradInput:mul(self.kW*self.kH)
-      end
-      return self.gradInput
+    end
+    return self.gradInput
    end
 end
 

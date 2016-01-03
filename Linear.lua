@@ -40,7 +40,7 @@ function Linear:updateOutput(input)
    elseif input:dim() == 2 then
       local nframe = input:size(1)
       local nElement = self.output:nElement()
-      self.output:resize(nframe, self.bias:size(1))
+  self.output:resize(nframe, self.bias:size(1))
       if self.output:nElement() ~= nElement then
          self.output:zero()
       end
@@ -48,8 +48,8 @@ function Linear:updateOutput(input)
       if self.addBuffer:nElement() ~= nframe then
          self.addBuffer:resize(nframe):fill(1)
       end
-      self.output:addmm(0, self.output, 1, input, self.weight:t())
-      self.output:addr(1, self.addBuffer, self.bias)
+  self.output:addmm(0, self.output, 1, input, self.weight:t())
+  self.output:addr(1, self.addBuffer, self.bias)
    else
       error('input must be vector or matrix')
    end
@@ -81,8 +81,8 @@ function Linear:accGradParameters(input, gradOutput, scale)
       self.gradWeight:addr(scale, gradOutput, input)
       self.gradBias:add(scale, gradOutput)
    elseif input:dim() == 2 then
-      self.gradWeight:addmm(scale, gradOutput:t(), input)
-      self.gradBias:addmv(scale, gradOutput:t(), self.addBuffer)
+  self.gradWeight:addmm(scale, gradOutput:t(), input)
+  self.gradBias:addmv(scale, gradOutput:t(), self.addBuffer)
    end
 end
 
