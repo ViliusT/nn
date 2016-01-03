@@ -5,7 +5,7 @@ function SpatialMaxUnpooling:__init(poolingModule)
   assert(torch.type(poolingModule)=='nn.SpatialMaxPooling', 'Argument must be a nn.SPatialMaxPooling module')
   assert(poolingModule.kH==poolingModule.dH and poolingModule.kW==poolingModule.dW, "The size of pooling module's kernel must be equal to its stride")
   self.pooling = poolingModule
-
+  
   poolingModule.updateOutput = function(pool, input)
     local dims = input:dim()
     pool.iheight = input:size(dims-1)
@@ -33,12 +33,12 @@ function SpatialMaxUnpooling:updateGradInput(input, gradOutput)
 end
 
 function SpatialMaxUnpooling:empty()
-   self.gradInput:resize()
-   self.gradInput:storage():resize(0)
-   self.output:resize()
-   self.output:storage():resize(0)
+  self.gradInput:resize()
+  self.gradInput:storage():resize(0)
+  self.output:resize()
+  self.output:storage():resize(0)
 end
 
 function SpatialMaxUnpooling:__tostring__()
-   return 'nn.SpatialMaxUnpooling associated to '..tostring(self.pooling)
+  return 'nn.SpatialMaxUnpooling associated to '..tostring(self.pooling)
 end
