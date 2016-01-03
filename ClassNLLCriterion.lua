@@ -24,11 +24,11 @@ end
 
 
 function ClassNLLCriterion:__len()
-   if (self.weights) then
-      return #self.weights
-   else
-      return 0
-   end
+  if (self.weights) then
+    return #self.weights
+  else
+    return 0
+  end
 end
 
 

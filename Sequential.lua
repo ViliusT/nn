@@ -1,7 +1,7 @@
 local Sequential, _ = torch.class('nn.Sequential', 'nn.Container')
 
 function Sequential:__len()
-   return #self.modules
+  return #self.modules
 end
 
 function Sequential:add(module)
