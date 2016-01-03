@@ -98,7 +98,7 @@ function Module:share(mlp, ...)
          mlp.accUpdateGradParameters = mlp.sharedAccUpdateGradParameters
       end
    end
-   return self
+  return self
 end
 
 function Module:clone(...)
@@ -207,7 +207,7 @@ function Module.flatten(parameters)
                           size          = param:size(),
                           stride        = param:stride()}
    end
-
+  
    -- 2. construct a single tensor that will hold all the parameters
    local flatParameters = TmpTensor(nParameters):zero()
 
