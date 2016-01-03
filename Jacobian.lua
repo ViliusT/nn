@@ -295,7 +295,7 @@ function nn.Jacobian.testIO(module,input, minval, maxval)
    -- run module
    module:forward(input)
    local go = module.output:clone():copy(torch.rand(module.output:nElement()):mul(inrange):add(minval))
-   module:zeroGradParameters()
+  module:zeroGradParameters()
    module:updateGradInput(input,go)
    module:accGradParameters(input,go)
 

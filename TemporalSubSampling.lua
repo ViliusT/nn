@@ -23,17 +23,17 @@ function TemporalSubSampling:reset(stdv)
    else
       stdv = 1/math.sqrt(self.kW)
    end
-   if nn.oldSeed then
-      self.weight:apply(function()
-         return torch.uniform(-stdv, stdv)
-      end)
-      self.bias:apply(function()
-         return torch.uniform(-stdv, stdv)
-      end)
-   else
-      self.weight:uniform(-stdv, stdv)
-      self.bias:uniform(-stdv, stdv)
-   end
+  if nn.oldSeed then
+    self.weight:apply(function()
+      return torch.uniform(-stdv, stdv)
+    end)
+  self.bias:apply(function()
+    return torch.uniform(-stdv, stdv)
+  end)
+else
+self.weight:uniform(-stdv, stdv)
+self.bias:uniform(-stdv, stdv)
+end
 end
 
 function TemporalSubSampling:updateOutput(input)

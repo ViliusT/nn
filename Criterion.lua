@@ -50,7 +50,7 @@ function Criterion:cuda()
 end
 
 function Criterion:__call__(input, target)
-   self.output = self:forward(input, target)
-   self.gradInput = self:backward(input, target)
-   return self.output, self.gradInput
+  self.output = self:forward(input, target)
+  self.gradInput = self:backward(input, target)
+  return self.output, self.gradInput
 end

@@ -2,20 +2,20 @@ local SpatialConvolutionMM, parent = torch.class('nn.SpatialConvolutionMM', 'nn.
 
 function SpatialConvolutionMM:__init(nInputPlane, nOutputPlane, kW, kH, dW, dH, padW, padH)
    parent.__init(self)
-   
-   dW = dW or 1
-   dH = dH or 1
+  
+  dW = dW or 1
+  dH = dH or 1
 
    self.nInputPlane = nInputPlane
    self.nOutputPlane = nOutputPlane
    self.kW = kW
    self.kH = kH
 
-   self.dW = dW
-   self.dH = dH
+  self.dW = dW
+  self.dH = dH
   self.padW = padW or 0
   self.padH = padH or self.padW
-
+  
    self.weight = torch.Tensor(nOutputPlane, nInputPlane*kH*kW)
    self.bias = torch.Tensor(nOutputPlane)
    self.gradWeight = torch.Tensor(nOutputPlane, nInputPlane*kH*kW)
@@ -33,17 +33,17 @@ function SpatialConvolutionMM:reset(stdv)
    else
       stdv = 1/math.sqrt(self.kW*self.kH*self.nInputPlane)
    end
-   if nn.oldSeed then
-      self.weight:apply(function()
-         return torch.uniform(-stdv, stdv)
-      end)
-      self.bias:apply(function()
-         return torch.uniform(-stdv, stdv)
-      end)  
-   else
-      self.weight:uniform(-stdv, stdv)
-      self.bias:uniform(-stdv, stdv)
-   end
+  if nn.oldSeed then
+    self.weight:apply(function()
+      return torch.uniform(-stdv, stdv)
+    end)
+  self.bias:apply(function()
+    return torch.uniform(-stdv, stdv)
+  end)
+else
+self.weight:uniform(-stdv, stdv)
+self.bias:uniform(-stdv, stdv)
+end
 end
 
 local function makeContiguous(self, input, gradOutput)

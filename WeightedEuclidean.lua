@@ -27,7 +27,7 @@ local function view(res, src, ...)
   local args = {...}
   if src:isContiguous() then
       res:view(src, table.unpack(args))
-   else
+  else
       res:reshape(src, table.unpack(args))
    end
 end

@@ -22,13 +22,13 @@ function Module:updateOutput(input)
 end
 
 function Module:forward(input)
-   return self:updateOutput(input)
+  return self:updateOutput(input)
 end
 
 function Module:backward(input, gradOutput, scale)
-   scale = scale or 1
+  scale = scale or 1
    self:updateGradInput(input, gradOutput)
-   self:accGradParameters(input, gradOutput, scale)
+  self:accGradParameters(input, gradOutput, scale)
    return self.gradInput
 end
 
@@ -90,7 +90,7 @@ function Module:evaluate()
 end
 
 function Module:share(mlp, ...)
-   local arg = {...}
+  local arg = {...}
    for i,v in ipairs(arg) do
       if self[v] ~= nil then
          self[v]:set(mlp[v])
@@ -180,8 +180,8 @@ function Module.flatten(parameters)
                                  sortedSize:storage(),
                                  sortedStride:storage())
       return t:isContiguous()
-   end
-
+  end
+  
    if not parameters or #parameters == 0 then
       return torch.Tensor()
    end
@@ -210,7 +210,7 @@ function Module.flatten(parameters)
   
    -- 2. construct a single tensor that will hold all the parameters
    local flatParameters = TmpTensor(nParameters):zero()
-
+  
    -- 3. determine if there are elements in the storage that none of the
    --    parameter tensors reference ('holes')
    local tensorsCompact = true
@@ -221,7 +221,7 @@ function Module.flatten(parameters)
       tmp:fill(1)
       tensorsCompact = tensorsCompact and isCompact(tmp)
    end
-
+  
    local maskParameters  = flatParameters:byte():clone()
    local compactOffsets  = flatParameters:long():cumsum(1)
    local nUsedParameters = compactOffsets[-1]
@@ -231,7 +231,7 @@ function Module.flatten(parameters)
       local storage, offset = table.unpack(storageAndOffset)
       flatParameters[{{offset+1,offset+storage:size()}}]:copy(Tensor():set(storage))
    end
-
+  
    -- 5. allow garbage collection
    storages = nil
    for k = 1,#parameters do
@@ -248,7 +248,7 @@ function Module.flatten(parameters)
       for k = 1,#parameters do
         parameterMeta[k].storageOffset =
               compactOffsets[parameterMeta[k].storageOffset]
-      end
+    end
    end
 
    if TmpTensor ~= Tensor then
@@ -273,13 +273,13 @@ function Module:getParameters()
 end
 
 function Module:__call__(input, gradOutput)
-   self:forward(input)
-   if gradOutput then
-      self:backward(input, gradOutput)
-      return self.output, self.gradInput
-   else
-      return self.output
-   end
+  self:forward(input)
+  if gradOutput then
+    self:backward(input, gradOutput)
+    return self.output, self.gradInput
+  else
+    return self.output
+  end
 end
 
 -- Run a callback (called with the module as an argument) in preorder over this

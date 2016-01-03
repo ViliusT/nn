@@ -90,22 +90,22 @@ function ConcatTable:zeroGradParameters()
 end
 
 function ConcatTable:__tostring__()
-   local tab = '  '
-   local line = '\n'
-   local next = '  |`-> '
-   local ext = '  |    '
-   local extlast = '       '
-   local last = '   ... -> '
+  local tab = '  '
+  local line = '\n'
+  local next = '  |`-> '
+  local ext = '  |    '
+  local extlast = '       '
+  local last = '   ... -> '
   local str = torch.type(self)
-   str = str .. ' {' .. line .. tab .. 'input'
-   for i=1,#self.modules do
+  str = str .. ' {' .. line .. tab .. 'input'
+    for i=1,#self.modules do
       if i == self.modules then
-         str = str .. line .. tab .. next .. '(' .. i .. '): ' .. tostring(self.modules[i]):gsub(line, line .. tab .. extlast)
+        str = str .. line .. tab .. next .. '(' .. i .. '): ' .. tostring(self.modules[i]):gsub(line, line .. tab .. extlast)
       else
-         str = str .. line .. tab .. next .. '(' .. i .. '): ' .. tostring(self.modules[i]):gsub(line, line .. tab .. ext)
+        str = str .. line .. tab .. next .. '(' .. i .. '): ' .. tostring(self.modules[i]):gsub(line, line .. tab .. ext)
       end
-   end
-   str = str .. line .. tab .. last .. 'output'
-   str = str .. line .. '}'
-   return str
+    end
+    str = str .. line .. tab .. last .. 'output'
+    str = str .. line .. '}'
+  return str
 end

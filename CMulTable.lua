@@ -15,13 +15,13 @@ function CMulTable:updateOutput(input)
 end
 
 function CMulTable:updateGradInput_efficient(input, gradOutput)
-   self.tout = self.tout or input[1].new()
-   self.tout:resizeAs(self.output)
+  self.tout = self.tout or input[1].new()
+  self.tout:resizeAs(self.output)
    for i=1,#input do
-      self.gradInput[i] = self.gradInput[i] or input[1].new()
+    self.gradInput[i] = self.gradInput[i] or input[1].new()
       self.gradInput[i]:resizeAs(input[i]):copy(gradOutput)
-      self.tout:copy(self.output):cdiv(input[i])
-      self.gradInput[i]:cmul(self.tout)
+    self.tout:copy(self.output):cdiv(input[i])
+    self.gradInput[i]:cmul(self.tout)
    end
 
    for i=#input+1, #self.gradInput do
