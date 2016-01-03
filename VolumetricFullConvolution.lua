@@ -54,13 +54,13 @@ end
 end
 
 function VolumetricFullConvolution:updateOutput(input)
-   return input.nn.VolumetricFullConvolution_updateOutput(self, input)
+return input.nn.VolumetricFullConvolution_updateOutput(self, input)
 end
 
 function VolumetricFullConvolution:updateGradInput(input, gradOutput)
-   return input.nn.VolumetricFullConvolution_updateGradInput(self, input, gradOutput)
+return input.nn.VolumetricFullConvolution_updateGradInput(self, input, gradOutput)
 end
 
 function VolumetricFullConvolution:accGradParameters(input, gradOutput, scale)
-   return input.nn.VolumetricFullConvolution_accGradParameters(self, input, gradOutput, scale)
+return input.nn.VolumetricFullConvolution_accGradParameters(self, input, gradOutput, scale)
 end

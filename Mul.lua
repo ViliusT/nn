@@ -21,13 +21,13 @@ function Mul:reset(stdv)
 end
 
 function Mul:updateOutput(input)
-   self.output:resizeAs(input):copy(input);
+  self.output:resizeAs(input):copy(input);
   self.output:mul(self.weight[1]);
   return self.output
 end
 
 function Mul:updateGradInput(input, gradOutput)
-   self.gradInput:resizeAs(input):zero()
+  self.gradInput:resizeAs(input):zero()
   self.gradInput:add(self.weight[1], gradOutput)
   return self.gradInput
 end

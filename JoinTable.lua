@@ -21,11 +21,11 @@ function JoinTable:updateOutput(input)
     else
       self.size[dimension] = self.size[dimension]
       + currentOutput:size(dimension)
-      end
+    end
   end
   self.output:resize(self.size)
-
-   local offset = 1
+  
+  local offset = 1
   for i=1,#input do
     local currentOutput = input[i]
     self.output:narrow(dimension, offset,
@@ -41,21 +41,21 @@ function JoinTable:updateGradInput(input, gradOutput)
     dimension = dimension + 1
   end
   
-   for i=1,#input do
+  for i=1,#input do
     if self.gradInput[i] == nil then
       self.gradInput[i] = input[i].new()
     end
     self.gradInput[i]:resizeAs(input[i])
   end
   
-   -- clear out invalid gradInputs
-   for i=#input+1, #self.gradInput do
-      self.gradInput[i] = nil
-   end
-
+  -- clear out invalid gradInputs
+  for i=#input+1, #self.gradInput do
+    self.gradInput[i] = nil
+  end
+  
   local offset = 1
   for i=1,#input do
-      local currentOutput = input[i]
+    local currentOutput = input[i]
     local currentGradInput = gradOutput:narrow(dimension, offset,
       currentOutput:size(dimension))
     self.gradInput[i]:copy(currentGradInput)
