@@ -4285,174 +4285,174 @@ function nntest.DepthConcat()
 end
 
 local function createMatrixInputSizes()
-  local M = torch.random(10, 20)
-  local N = torch.random(10, 20)
-  local P = torch.random(10, 20)
-  return M, N, P
+local M = torch.random(10, 20)
+local N = torch.random(10, 20)
+local P = torch.random(10, 20)
+return M, N, P
 end
 
 function nntest.MM()
-  local mm = nn.MM(false, true)
-  local M, N, P = createMatrixInputSizes()
-  local A = torch.randn(M, N)
-  local B = torch.randn(P, N)
+local mm = nn.MM(false, true)
+local M, N, P = createMatrixInputSizes()
+local A = torch.randn(M, N)
+local B = torch.randn(P, N)
 
-  -- Test forward pass.
-  local output = mm:forward({A, B})
-  mytester:assertTableEq(output:size():totable(), {M, P},
-                         'Output has wrong dimensionality')
-  mytester:assertTensorEq(output, A * B:t(), 1e-10,
-                          'Wrong output')
+-- Test forward pass.
+local output = mm:forward({A, B})
+mytester:assertTableEq(output:size():totable(), {M, P},
+'Output has wrong dimensionality')
+mytester:assertTensorEq(output, A * B:t(), 1e-10,
+'Wrong output')
 
-  -- Test backward pass.
-  local gradOutput = torch.randn(M, P)
-  local gradInput = mm:backward({A, B}, gradOutput)
-  mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
+-- Test backward pass.
+local gradOutput = torch.randn(M, P)
+local gradInput = mm:backward({A, B}, gradOutput)
+mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
   local gradA, gradB = table.unpack(gradInput)
-  mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
-                         'Gradient for input A has wrong size')
-  mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
-                         'Gradient for input B has wrong size')
-  mytester:assertTensorEq(gradA, gradOutput * B, 1e-10,
-                          'Wrong gradient for input A')
-  mytester:assertTensorEq(gradB, gradOutput:t() * A, 1e-10,
-                          'Wrong gradient for input B')
+mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
+'Gradient for input A has wrong size')
+mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
+'Gradient for input B has wrong size')
+mytester:assertTensorEq(gradA, gradOutput * B, 1e-10,
+'Wrong gradient for input A')
+mytester:assertTensorEq(gradB, gradOutput:t() * A, 1e-10,
+'Wrong gradient for input B')
 end
 
 function nntest.BatchMMNoTranspose()
-  local mm = nn.MM()
-  local M, N, P = createMatrixInputSizes()
-  for bSize = 1, 11, 5 do
-    local A = torch.randn(bSize, M, N)
-    local B = torch.randn(bSize, N, P)
+local mm = nn.MM()
+local M, N, P = createMatrixInputSizes()
+for bSize = 1, 11, 5 do
+local A = torch.randn(bSize, M, N)
+local B = torch.randn(bSize, N, P)
 
-    -- Test forward pass.
-    local output = mm:forward({A, B})
-    mytester:assertTableEq(output:size():totable(), {bSize, M, P},
-                           'Output has wrong dimensionality')
-    for i = 1, bSize do
-      mytester:assertTensorEq(output[i], A[i] * B[i], 1e-10,
-                              'Output wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-    end
+-- Test forward pass.
+local output = mm:forward({A, B})
+mytester:assertTableEq(output:size():totable(), {bSize, M, P},
+'Output has wrong dimensionality')
+for i = 1, bSize do
+mytester:assertTensorEq(output[i], A[i] * B[i], 1e-10,
+'Output wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+end
 
-    -- Test backward pass.
-    local gradOutput = torch.randn(bSize, M, P)
-    local gradInput = mm:backward({A, B}, gradOutput)
-    mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
+-- Test backward pass.
+local gradOutput = torch.randn(bSize, M, P)
+local gradInput = mm:backward({A, B}, gradOutput)
+mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
     local gradA, gradB = table.unpack(gradInput)
-    mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
-                           'Gradient for input A has wrong size')
-    mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
-                           'Gradient for input B has wrong size')
-    for i = 1, bSize do
-      mytester:assertTensorEq(gradA[i], gradOutput[i] * B[i]:t(), 1e-10,
-                              'Gradient for input A wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-      mytester:assertTensorEq(gradB[i], A[i]:t() * gradOutput[i], 1e-10,
-                              'Gradient for input B wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-    end
-  end
+mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
+'Gradient for input A has wrong size')
+mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
+'Gradient for input B has wrong size')
+for i = 1, bSize do
+mytester:assertTensorEq(gradA[i], gradOutput[i] * B[i]:t(), 1e-10,
+'Gradient for input A wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+mytester:assertTensorEq(gradB[i], A[i]:t() * gradOutput[i], 1e-10,
+'Gradient for input B wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+end
+end
 end
 
 function nntest.BatchMMTransposeA()
-  local mm = nn.MM(true, false)
-  local M, N, P = createMatrixInputSizes()
-  for bSize = 1, 11, 5 do
-    local A = torch.randn(bSize, N, M)
-    local B = torch.randn(bSize, N, P)
+local mm = nn.MM(true, false)
+local M, N, P = createMatrixInputSizes()
+for bSize = 1, 11, 5 do
+local A = torch.randn(bSize, N, M)
+local B = torch.randn(bSize, N, P)
 
-    -- Test forward pass.
-    local output = mm:forward({A, B})
-    mytester:assertTableEq(output:size():totable(), {bSize, M, P},
-                           'Output has wrong dimensionality')
-    for i = 1, bSize do
-      mytester:assertTensorEq(output[i], A[i]:t() * B[i], 1e-10,
-                              'Output wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-    end
+-- Test forward pass.
+local output = mm:forward({A, B})
+mytester:assertTableEq(output:size():totable(), {bSize, M, P},
+'Output has wrong dimensionality')
+for i = 1, bSize do
+mytester:assertTensorEq(output[i], A[i]:t() * B[i], 1e-10,
+'Output wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+end
 
-    -- Test backward pass.
-    local gradOutput = torch.randn(bSize, M, P)
-    local gradInput = mm:backward({A, B}, gradOutput)
-    mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
+-- Test backward pass.
+local gradOutput = torch.randn(bSize, M, P)
+local gradInput = mm:backward({A, B}, gradOutput)
+mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
     local gradA, gradB = table.unpack(gradInput)
-    mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
-                           'Gradient for input A has wrong size')
-    mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
-                           'Gradient for input B has wrong size')
-    for i = 1, bSize do
-      mytester:assertTensorEq(gradA[i], B[i] * gradOutput[i]:t(), 1e-10,
-                              'Gradient for input A wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-      mytester:assertTensorEq(gradB[i], A[i] * gradOutput[i], 1e-10,
-                              'Gradient for input B wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-    end
-  end
+mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
+'Gradient for input A has wrong size')
+mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
+'Gradient for input B has wrong size')
+for i = 1, bSize do
+mytester:assertTensorEq(gradA[i], B[i] * gradOutput[i]:t(), 1e-10,
+'Gradient for input A wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+mytester:assertTensorEq(gradB[i], A[i] * gradOutput[i], 1e-10,
+'Gradient for input B wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+end
+end
 end
 
 function nntest.BatchMMTransposeB()
-  local mm = nn.MM(false, true)
-  local M, N, P = createMatrixInputSizes()
-  for bSize = 1, 11, 5 do
-    local A = torch.randn(bSize, M, N)
-    local B = torch.randn(bSize, P, N)
+local mm = nn.MM(false, true)
+local M, N, P = createMatrixInputSizes()
+for bSize = 1, 11, 5 do
+local A = torch.randn(bSize, M, N)
+local B = torch.randn(bSize, P, N)
 
-    -- Test forward pass.
-    local output = mm:forward({A, B})
-    mytester:assertTableEq(output:size():totable(), {bSize, M, P},
-                           'Output has wrong dimensionality')
-    for i = 1, bSize do
-      mytester:assertTensorEq(output[i], A[i] * B[i]:t(), 1e-10,
-                              'Output wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-    end
+-- Test forward pass.
+local output = mm:forward({A, B})
+mytester:assertTableEq(output:size():totable(), {bSize, M, P},
+'Output has wrong dimensionality')
+for i = 1, bSize do
+mytester:assertTensorEq(output[i], A[i] * B[i]:t(), 1e-10,
+'Output wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+end
 
-    -- Test backward pass.
-    local gradOutput = torch.randn(bSize, M, P)
-    local gradInput = mm:backward({A, B}, gradOutput)
-    mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
+-- Test backward pass.
+local gradOutput = torch.randn(bSize, M, P)
+local gradInput = mm:backward({A, B}, gradOutput)
+mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
     local gradA, gradB = table.unpack(gradInput)
-    mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
-                           'Gradient for input A has wrong size')
-    mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
-                           'Gradient for input B has wrong size')
-    for i = 1, bSize do
-      mytester:assertTensorEq(gradA[i], gradOutput[i] * B[i], 1e-10,
-                              'Gradient for input A wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-      mytester:assertTensorEq(gradB[i], gradOutput[i]:t() * A[i], 1e-10,
-                              'Gradient for input B wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-    end
-  end
+mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
+'Gradient for input A has wrong size')
+mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
+'Gradient for input B has wrong size')
+for i = 1, bSize do
+mytester:assertTensorEq(gradA[i], gradOutput[i] * B[i], 1e-10,
+'Gradient for input A wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+mytester:assertTensorEq(gradB[i], gradOutput[i]:t() * A[i], 1e-10,
+'Gradient for input B wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+end
+end
 end
 
 function nntest.BatchMMTransposeBoth()
-  local mm = nn.MM(true, true)
-  local M, N, P = createMatrixInputSizes()
-  for bSize = 1, 11, 5 do
-    local A = torch.randn(bSize, N, M)
-    local B = torch.randn(bSize, P, N)
+local mm = nn.MM(true, true)
+local M, N, P = createMatrixInputSizes()
+for bSize = 1, 11, 5 do
+local A = torch.randn(bSize, N, M)
+local B = torch.randn(bSize, P, N)
 
-    -- Test forward pass.
-    local output = mm:forward({A, B})
-    mytester:assertTableEq(output:size():totable(), {bSize, M, P},
-                           'Output has wrong dimensionality')
-    for i = 1, bSize do
-      mytester:assertTensorEq(output[i], A[i]:t() * B[i]:t(), 1e-10,
-                              'Output wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-    end
+-- Test forward pass.
+local output = mm:forward({A, B})
+mytester:assertTableEq(output:size():totable(), {bSize, M, P},
+'Output has wrong dimensionality')
+for i = 1, bSize do
+mytester:assertTensorEq(output[i], A[i]:t() * B[i]:t(), 1e-10,
+'Output wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+end
 
-    -- Test backward pass.
-    local gradOutput = torch.randn(bSize, M, P)
-    local gradInput = mm:backward({A, B}, gradOutput)
-    mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
+-- Test backward pass.
+local gradOutput = torch.randn(bSize, M, P)
+local gradInput = mm:backward({A, B}, gradOutput)
+mytester:assert(#gradInput == 2, 'gradInput must be table of size 2')
     local gradA, gradB = table.unpack(gradInput)
-    mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
-                           'Gradient for input A has wrong size')
-    mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
-                           'Gradient for input B has wrong size')
-    for i = 1, bSize do
-      mytester:assertTensorEq(gradA[i], B[i]:t() * gradOutput[i]:t(), 1e-10,
-                              'Gradient for input A wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-      mytester:assertTensorEq(gradB[i], gradOutput[i]:t() * A[i]:t(), 1e-10,
-                              'Gradient for input B wrong for bSize = ' .. bSize .. ' and i = ' .. i)
-    end
-  end
+mytester:assertTableEq(gradA:size():totable(), A:size():totable(),
+'Gradient for input A has wrong size')
+mytester:assertTableEq(gradB:size():totable(), B:size():totable(),
+'Gradient for input B has wrong size')
+for i = 1, bSize do
+mytester:assertTensorEq(gradA[i], B[i]:t() * gradOutput[i]:t(), 1e-10,
+'Gradient for input A wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+mytester:assertTensorEq(gradB[i], gradOutput[i]:t() * A[i]:t(), 1e-10,
+'Gradient for input B wrong for bSize = ' .. bSize .. ' and i = ' .. i)
+end
+end
 end
 
 function nntest.DotProduct()
@@ -4795,29 +4795,29 @@ function nntest.Padding()
 end
 
 function nntest.addSingletonDimension()
-   local dims = torch.random(5)
-   local size = torch.LongTensor(dims):random(10)
-   local perm = torch.randperm(dims):totable()
+local dims = torch.random(5)
+local size = torch.LongTensor(dims):random(10)
+local perm = torch.randperm(dims):totable()
    local tensor = torch.Tensor(table.unpack(size:totable())):uniform():permute(table.unpack(perm))
-   size = torch.gather(size, 1, torch.LongTensor(perm))
+size = torch.gather(size, 1, torch.LongTensor(perm))
 
-   local firstDim = nn.utils.addSingletonDimension(tensor)
+local firstDim = nn.utils.addSingletonDimension(tensor)
    mytester:assertTableEq(firstDim:size():totable(), {1, table.unpack(size:totable())},
-                          "wrong size for singleton dimension 1")
-   mytester:assertTensorEq(firstDim[1], tensor, 0,
-                           "wrong content for singleton dimension 1")
+"wrong size for singleton dimension 1")
+mytester:assertTensorEq(firstDim[1], tensor, 0,
+"wrong content for singleton dimension 1")
 
-   local dim = torch.random(dims + 1)
-   local result = nn.utils.addSingletonDimension(tensor, dim)
-   local resultSize = size:totable()
-   table.insert(resultSize, dim, 1)
-   mytester:assertTableEq(result:size():totable(), resultSize,
-                          "wrong size for random singleton dimension")
-   mytester:assertTensorEq(result:select(dim, 1), tensor, 0,
-                           "wrong content for random singleton dimension")
+local dim = torch.random(dims + 1)
+local result = nn.utils.addSingletonDimension(tensor, dim)
+local resultSize = size:totable()
+table.insert(resultSize, dim, 1)
+mytester:assertTableEq(result:size():totable(), resultSize,
+"wrong size for random singleton dimension")
+mytester:assertTensorEq(result:select(dim, 1), tensor, 0,
+"wrong content for random singleton dimension")
 
    mytester:assertError(function() nn.utils.addSingletonDimension(tensor, dims + 2) end,
-                        "invalid dimension not detected")
+"invalid dimension not detected")
 end
 
 function nntest.Typecast()

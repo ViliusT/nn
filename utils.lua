@@ -36,14 +36,14 @@ end
 function nn.utils.recursiveType(param, type, tensorCache)
    tensorCache = tensorCache or {}
 
-   if torch.type(param) == 'table' then
-      for k, v in pairs(param) do
+  if torch.type(param) == 'table' then
+    for k, v in pairs(param) do
          param[k] = nn.utils.recursiveType(v, type, tensorCache)
-      end
-   elseif torch.isTypeOf(param, 'nn.Module') or
-          torch.isTypeOf(param, 'nn.Criterion') then
+    end
+  elseif torch.isTypeOf(param, 'nn.Module') or
+    torch.isTypeOf(param, 'nn.Criterion') then
       param:type(type, tensorCache)
-   elseif torch.isTensor(param) then
+  elseif torch.isTensor(param) then
       if torch.typename(param) ~= type then
          local newparam
          if tensorCache[param] then
@@ -70,8 +70,8 @@ function nn.utils.recursiveType(param, type, tensorCache)
          assert(torch.type(newparam) == type)
          param = newparam
       end
-   end
-   return param
+  end
+  return param
 end
 
 function nn.utils.recursiveResizeAs(t1,t2)
@@ -130,11 +130,11 @@ function nn.utils.addSingletonDimension(t, dim)
   local dim = dim or 1
   assert(dim > 0 and dim <= (t:dim() + 1), "invalid dimension: " .. dim
              .. '. Tensor is of ' .. t:dim() .. ' dimensions.')
-
+  
   local view = t.new()
   local size = torch.LongStorage(t:dim() + 1)
   local stride = torch.LongStorage(t:dim() + 1)
-
+  
   for d = 1, dim - 1 do
     size[d] = t:size(d)
     stride[d] = t:stride(d)
@@ -145,7 +145,7 @@ function nn.utils.addSingletonDimension(t, dim)
     size[d] = t:size(d - 1)
     stride[d] = t:stride(d - 1)
   end
-
+  
   view:set(t:storage(), t:storageOffset(), size, stride)
   return view
 end

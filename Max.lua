@@ -19,34 +19,34 @@ function Max:_getPositiveDimension(input)
 end
 
 function Max:_lazyInit()
-   self._output = self._output or self.output.new()
-   self._indices = self._indices or
-      (torch.type(self.output) == 'torch.CudaTensor' and torch.CudaTensor() or torch.LongTensor())
+  self._output = self._output or self.output.new()
+  self._indices = self._indices or
+  (torch.type(self.output) == 'torch.CudaTensor' and torch.CudaTensor() or torch.LongTensor())
 end
 
 function Max:updateOutput(input)
-   self:_lazyInit()
+  self:_lazyInit()
    local dimension = self:_getPositiveDimension(input)
    torch.max(self._output, self._indices, input, dimension)
-   if input:dim() > 1 then
+  if input:dim() > 1 then
      self.output = self._output:select(dimension, 1)
-   else
-     self.output = self._output
-   end
-   return self.output
+  else
+    self.output = self._output
+  end
+  return self.output
 end
 
 function Max:updateGradInput(input, gradOutput)
-   self:_lazyInit()
+  self:_lazyInit()
    local dimension = self:_getPositiveDimension(input)
-   local gradOutputView
-   if input:dim() > 1 then
+  local gradOutputView
+  if input:dim() > 1 then
      gradOutputView = nn.utils.addSingletonDimension(gradOutput, dimension)
-   else
-     gradOutputView = gradOutput
-   end
+  else
+    gradOutputView = gradOutput
+  end
    self.gradInput:resizeAs(input):zero():scatter(dimension, self._indices, gradOutputView)
-   return self.gradInput
+  return self.gradInput
 end
 
 function Max:type(type, tensorCache)
