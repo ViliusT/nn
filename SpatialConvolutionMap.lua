@@ -29,14 +29,14 @@ function nn.tables.random(nin, nout, nto)
    local tbl = torch.Tensor(nker, 2)
    local fi = torch.randperm(nin)
    local frcntr = 1
-   local nfi = math.floor(nin/nto) -- number of distinct nto chunks
+  local nfi = math.floor(nin/nto) -- number of distinct nto chunks
    local totbl = tbl:select(2,2)
    local frtbl = tbl:select(2,1)
    local fitbl = fi:narrow(1, 1, (nfi * nto)) -- part of fi that covers distinct chunks
    local ufrtbl= frtbl:unfold(1, nto, nto)
    local utotbl= totbl:unfold(1, nto, nto)
    local ufitbl= fitbl:unfold(1, nto, nto)
-
+  
    -- start filling frtbl
    for i=1,nout do -- fro each unit in target map
       ufrtbl:select(1,i):copy(ufitbl:select(1,frcntr))
@@ -69,7 +69,7 @@ function SpatialConvolutionMap:__init(conMatrix, kW, kH, dW, dH)
    self.bias = torch.Tensor(self.nOutputPlane)
    self.gradWeight = torch.Tensor(self.connTable:size(1), kH, kW)
    self.gradBias = torch.Tensor(self.nOutputPlane)
-
+  
    self:reset()
 end
 
