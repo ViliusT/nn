@@ -4759,21 +4759,21 @@ function nntest.SpatialBatchNormalization()
 end
 
 function nntest.GradientReversal()
-   local ini = math.random(3,5)
-   local inj = math.random(3,5)
-   local ink = math.random(3,5)
-   local input = torch.Tensor(ini,inj,ink):zero()
-   -- Two GradientReversal layers should cancel each other out
-   local module = nn.Sequential()
-   module:add(nn.GradientReversal())
-   module:add(nn.GradientReversal())
+local ini = math.random(3,5)
+local inj = math.random(3,5)
+local ink = math.random(3,5)
+local input = torch.Tensor(ini,inj,ink):zero()
+-- Two GradientReversal layers should cancel each other out
+local module = nn.Sequential()
+module:add(nn.GradientReversal())
+module:add(nn.GradientReversal())
 
-   local err = jac.testJacobian(module,input, 0.1, 10)
-   mytester:assertlt(err,precision, 'error on state ')
+local err = jac.testJacobian(module,input, 0.1, 10)
+mytester:assertlt(err,precision, 'error on state ')
 
-   local ferr,berr = jac.testIO(module,input, 0.1, 10)
-   mytester:asserteq(ferr, 0, torch.typename(module) .. ' - i/o forward err ')
-   mytester:asserteq(berr, 0, torch.typename(module) .. ' - i/o backward err ')
+local ferr,berr = jac.testIO(module,input, 0.1, 10)
+mytester:asserteq(ferr, 0, torch.typename(module) .. ' - i/o forward err ')
+mytester:asserteq(berr, 0, torch.typename(module) .. ' - i/o backward err ')
 end
 
 function nntest.Padding()
