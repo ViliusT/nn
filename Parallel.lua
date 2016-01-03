@@ -67,8 +67,8 @@ function Parallel:accGradParameters(input, gradOutput, scale)
       local currentOutput = module.output
       local outputSize = currentOutput:size(self.outputDimension)
       
-      module:accGradParameters(
-          input:select(self.inputDimension,i),
+    module:accGradParameters(
+      input:select(self.inputDimension,i),
           gradOutput:narrow(self.outputDimension, offset,outputSize),
           scale
       )
@@ -84,12 +84,12 @@ function Parallel:accUpdateGradParameters(input, gradOutput, lr)
    for i=1,nModule do 
       local module = self.modules[i];
       local currentOutput = module.output
-      module:accUpdateGradParameters(
+    module:accUpdateGradParameters(
       
-          input:select(self.inputDimension,i),
-          gradOutput:narrow(self.outputDimension, offset,
-                            currentOutput:size(self.outputDimension)),
-          lr)
+      input:select(self.inputDimension,i),
+      gradOutput:narrow(self.outputDimension, offset,
+        currentOutput:size(self.outputDimension)),
+      lr)
         
       offset = offset + currentOutput:size(self.outputDimension)
    end

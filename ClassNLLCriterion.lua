@@ -43,7 +43,7 @@ function ClassNLLCriterion:updateOutput(input, target)
     else
         self.target = target:long()
     end
-
+  
     input.nn.ClassNLLCriterion_updateOutput(
         input,
         self.target,

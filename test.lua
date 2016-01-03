@@ -942,7 +942,7 @@ end
 
 local function criterionJacobianTest1D(cri, input, target)
    local eps = 1e-6
-   local _ = cri:forward(input, target)
+local _ = cri:forward(input, target)
    local dfdx = cri:backward(input, target)
    -- for each input perturbation, do central difference
    local centraldiff_dfdx = torch.Tensor():resizeAs(dfdx)
@@ -3201,10 +3201,10 @@ end
 function nntest.Module_getParameters_2()
    local n = nn.Sequential()
    n:add( nn.Linear(10,10) )
-   local _ = n:getParameters()
+local _ = n:getParameters()
 
    n:add( nn.Linear(10,10) )
-   local p = n:getParameters()
+local p = n:getParameters()
 
    mytester:asserteq((p[{ {111,210} }] - n.modules[2].weight):norm(), 0, 'error when appending new module')
    mytester:asserteq((p[{ {211,220} }] - n.modules[2].bias):norm(), 0, 'error when appending new module')
@@ -3235,10 +3235,10 @@ function nntest.Module_getParameters_4()
    local n = nn.Sequential()
    n:add( nn.Linear(10,10) )
    n:add( n.modules[1]:clone() )
-   local _ = n:getParameters()
+local _ = n:getParameters()
 
    n:add(nn.Linear(10,10))
-   local p = n:getParameters()
+local p = n:getParameters()
 
    mytester:asserteq((p[{ {1,100} }] - n.modules[1].weight):norm(), 0, 'error when using cloning')
    mytester:asserteq((p[{ {101,110} }] - n.modules[1].bias):norm(), 0, 'error when using cloning')
@@ -3276,10 +3276,10 @@ function nntest.Module_getParameters_6()
    local n = nn.Sequential()
    n:add( nn.Linear(10,10) )
    n:add( n.modules[1]:clone('weight','bias') )
-   local _ = n:getParameters()
+local _ = n:getParameters()
 
    n:add(nn.Linear(10,10))
-   local p = n:getParameters()
+local p = n:getParameters()
 
    mytester:asserteq((p[{ {1,100} }] - n.modules[1].weight):norm(), 0, 'error when using cloning+sharing')
    mytester:asserteq((p[{ {101,110} }] - n.modules[1].bias):norm(), 0, 'error when using cloning+sharing')
@@ -3297,10 +3297,10 @@ function nntest.Module_getParameters_7()
    local n = nn.Sequential()
    n:add( nn.Linear(10,10) )
    n:add( n.modules[1]:clone('weight','bias') )
-   local _ = n:getParameters()
+local _ = n:getParameters()
 
    n:add(nn.Linear(10,10))
-   local _ = n:getParameters()
+local _ = n:getParameters()
 
    local n1 = nn.Sequential()
    n1:add( nn.Linear(10,10) )
@@ -3312,7 +3312,7 @@ function nntest.Module_getParameters_7()
    n:add( n1 )
    n:add( n2 )
 
-   local _ = n:getParameters()
+local _ = n:getParameters()
 
    local nf = nn.Sequential()
    nf:add( n1 )
@@ -3350,7 +3350,7 @@ function nntest.Module_getParameters_8()
   -- clone the second MLP to ensure that the weights before calling getParameters are preserved
   mlp2 = mlp2:clone()
 
-  local p, _ = net:getParameters()
+local p, _ = net:getParameters()
 
   mytester:asserteq((p[{ {1,100} }] - net.modules[1].weight):norm(), 0, 'error when using partial realloc')
   mytester:asserteq((p[{ {111,210} }] - net.modules[2].weight):norm(), 0, 'error when using partial realloc')
@@ -4197,7 +4197,7 @@ function nntest.FlattenTable()
    -- CASE 1: Nothing changes so the output table shouldn't be redefined
    local old_input_map = m.input_map
    local old_output = m.output
-   local _ = m:forward(input)
+local _ = m:forward(input)
    mytester:assert(old_input_map == m.input_map and old_output == m.output)
 
    -- CASE 2: An element is added to the input table
@@ -4239,7 +4239,7 @@ function nntest.L1Penalty()
    local input = torch.rand(2,10):add(-0.5)
    input[1][1] = 0
 
-   local _ = m:forward(input)
+local _ = m:forward(input)
    local grad = m:backward(input, torch.ones(input:size()))
 
    local err = input:clone():abs():sum()*weight - m.loss

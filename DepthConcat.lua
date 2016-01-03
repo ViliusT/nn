@@ -79,7 +79,7 @@ function DepthConcat:accGradParameters(input, gradOutput, scale)
    for i,module in ipairs(self.modules) do
       local currentOutput = module.output
       local gradOutputWindow = self:windowNarrow(gradOutput, currentOutput, offset)
-      module:accGradParameters(input, gradOutputWindow, scale)
+    module:accGradParameters(input, gradOutputWindow, scale)
       offset = offset + currentOutput:size(self.dimension)
    end
 end
@@ -108,7 +108,7 @@ function DepthConcat:accUpdateGradParameters(input, gradOutput, lr)
    for i,module in ipairs(self.modules) do
       local currentOutput = module.output
       local gradOutputWindow = self:windowNarrow(gradOutput, currentOutput, offset)
-      module:accUpdateGradParameters(input, gradOutputWindow, lr)
+    module:accUpdateGradParameters(input, gradOutputWindow, lr)
       offset = offset + currentOutput:size(self.dimension)
    end
 end
