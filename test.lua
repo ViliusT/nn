@@ -1028,10 +1028,10 @@ local cri = nn.MarginCriterion()
 end
 
 function nntest.MultiMarginCriterion()
-   local input = torch.rand(100)
-   local target = math.random(1,100)
-   local cri = nn.MultiMarginCriterion(math.random(1,2))
-   criterionJacobianTest1D(cri, input, target)
+local input = torch.rand(100)
+local target = math.random(1,100)
+local cri = nn.MultiMarginCriterion(math.random(1,2))
+criterionJacobianTest1D(cri, input, target)
 end
 
 function nntest.MarginRankingCriterion()
