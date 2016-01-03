@@ -1,16 +1,16 @@
 local View, parent = torch.class('nn.View', 'nn.Module')
 
 function View:__init(...)
-   parent.__init(self)
+  parent.__init(self)
    if select('#', ...) == 1 and torch.typename(select(1, ...)) == 'torch.LongStorage' then
       self.size = select(1, ...)
    else
-      self.size = torch.LongStorage({...})
-   end
+    self.size = torch.LongStorage({...})
+  end
 
-   self.numElements = 1
+  self.numElements = 1
    local inferdim = false
-   for i = 1,#self.size do
+  for i = 1,#self.size do
       local szi = self.size[i]
       if szi >= 0 then
          self.numElements = self.numElements * self.size[i]
@@ -19,16 +19,16 @@ function View:__init(...)
          assert(not inferdim, 'only one dimension can be at -1')
          inferdim = true
       end
-   end
-
-   self.output = nil
-   self.gradInput = nil
-   self.numInputDims = nil
+  end
+  
+  self.output = nil
+  self.gradInput = nil
+  self.numInputDims = nil
 end
 
 function View:setNumInputDims(numInputDims)
-   self.numInputDims = numInputDims
-   return self
+  self.numInputDims = numInputDims
+  return self
 end
 
 local function batchsize(input, size, numInputDims, numElements)
@@ -75,13 +75,13 @@ function View:updateOutput(input)
    local bsz = batchsize(input, self.size, self.numInputDims, self.numElements)
    if bsz then
       self.output = input:view(bsz, table.unpack(self.size:totable()))
-   else
-      self.output = input:view(self.size)
-   end
-   return self.output
+  else
+    self.output = input:view(self.size)
+  end
+  return self.output
 end
 
 function View:updateGradInput(input, gradOutput)
-   self.gradInput = gradOutput:view(input:size())
-   return self.gradInput
+  self.gradInput = gradOutput:view(input:size())
+  return self.gradInput
 end

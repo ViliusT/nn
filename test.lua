@@ -3699,39 +3699,39 @@ mytester:assert(torch.type(output) == 'torch.FloatTensor', 'copy forward type er
 end
 
 function nntest.JoinTable()
-   local tensor = torch.rand(3,4,5)
-   local input = {tensor, tensor}
-   local module
-   for d = 1,tensor:dim() do
-      module = nn.JoinTable(d)
-      mytester:asserteq(module:forward(input):size(d), tensor:size(d)*2, "dimension " .. d)
-   end
+local tensor = torch.rand(3,4,5)
+local input = {tensor, tensor}
+local module
+for d = 1,tensor:dim() do
+module = nn.JoinTable(d)
+mytester:asserteq(module:forward(input):size(d), tensor:size(d)*2, "dimension " .. d)
+end
 
-   -- Minibatch
-   local tensor = torch.rand(3,4,5)
-   local input = {tensor, tensor}
-   local module
-   for d = 1,tensor:dim()-1 do
-      module = nn.JoinTable(d, 2)
-      mytester:asserteq(module:forward(input):size(d+1), tensor:size(d+1)*2, "dimension " .. d)
-   end
+-- Minibatch
+local tensor = torch.rand(3,4,5)
+local input = {tensor, tensor}
+local module
+for d = 1,tensor:dim()-1 do
+module = nn.JoinTable(d, 2)
+mytester:asserteq(module:forward(input):size(d+1), tensor:size(d+1)*2, "dimension " .. d)
+end
 end
 
 function nntest.SplitTable()
-   local input = torch.randn(3,4,5)
-   local module
-   for d = 1,input:dim() do
-      module = nn.SplitTable(d)
-      mytester:asserteq(#module:forward(input), input:size(d), "dimension " .. d)
-   end
+local input = torch.randn(3,4,5)
+local module
+for d = 1,input:dim() do
+module = nn.SplitTable(d)
+mytester:asserteq(#module:forward(input), input:size(d), "dimension " .. d)
+end
 
-   -- Minibatch
-   local input = torch.randn(3,4,5)
-   local module
-   for d = 1,input:dim()-1 do
-      module = nn.SplitTable(d, 2)
-      mytester:asserteq(#module:forward(input), input:size(d+1), "dimension " .. d)
-   end
+-- Minibatch
+local input = torch.randn(3,4,5)
+local module
+for d = 1,input:dim()-1 do
+module = nn.SplitTable(d, 2)
+mytester:asserteq(#module:forward(input), input:size(d+1), "dimension " .. d)
+end
 
    -- Negative indices
    local module = nn.SplitTable(-3)
@@ -3959,29 +3959,29 @@ mytester:assertTensorEq(gradInput, gradInput2, 0.00001, "NarrowTable gradInput f
 end
 
 function nntest.View()
-   local input = torch.rand(10)
-   local template = torch.rand(5,2)
-   local target = template:size():totable()
-   local module = nn.View(template:size())
-   mytester:assertTableEq(module:forward(input):size():totable(), target, "Error in forward (1)")
+local input = torch.rand(10)
+local template = torch.rand(5,2)
+local target = template:size():totable()
+local module = nn.View(template:size())
+mytester:assertTableEq(module:forward(input):size():totable(), target, "Error in forward (1)")
    local module = nn.View(table.unpack(target))
-   mytester:assertTableEq(module:forward(input):size():totable(), target, "Error in forward (2)")
+mytester:assertTableEq(module:forward(input):size():totable(), target, "Error in forward (2)")
 
-   -- Minibatch
-   local minibatch = torch.rand(5,10)
-   mytester:assertTableEq(module:forward(minibatch):size(1),
-      minibatch:size(1),
-      "Error in minibatch dimension")
-   mytester:assertTableEq(module:forward(minibatch):nElement(),
-      minibatch:nElement(),
-      "Error in minibatch nElement")
-   local module = nn.View(-1):setNumInputDims(1)
-   mytester:assertTableEq(module:forward(minibatch):size(1),
-      minibatch:size(1),
-      "Error in minibatch dimension with size -1")
-   mytester:assertTableEq(module:forward(minibatch):nElement(),
-      minibatch:nElement(),
-      "Error in minibatch nElement with size -1")
+-- Minibatch
+local minibatch = torch.rand(5,10)
+mytester:assertTableEq(module:forward(minibatch):size(1),
+minibatch:size(1),
+"Error in minibatch dimension")
+mytester:assertTableEq(module:forward(minibatch):nElement(),
+minibatch:nElement(),
+"Error in minibatch nElement")
+local module = nn.View(-1):setNumInputDims(1)
+mytester:assertTableEq(module:forward(minibatch):size(1),
+minibatch:size(1),
+"Error in minibatch dimension with size -1")
+mytester:assertTableEq(module:forward(minibatch):nElement(),
+minibatch:nElement(),
+"Error in minibatch nElement with size -1")
 
    -- another setNumInputDims case
    local minibatch = torch.rand(5,4,10)
