@@ -13,46 +13,46 @@ oheight  = height*scale_factor
 --]]
 
 function SpatialUpSamplingNearest:__init(scale)
-   parent.__init(self)
-
-   self.scale_factor = scale
-   if self.scale_factor < 1 then
-     error('scale_factor must be greater than 1')
-   end
-   if math.floor(self.scale_factor) ~= self.scale_factor then
-     error('scale_factor must be integer')
-   end
-   self.inputSize = torch.LongStorage(4)
-   self.outputSize = torch.LongStorage(4)
-   self.usage = nil
+  parent.__init(self)
+  
+  self.scale_factor = scale
+  if self.scale_factor < 1 then
+    error('scale_factor must be greater than 1')
+  end
+  if math.floor(self.scale_factor) ~= self.scale_factor then
+    error('scale_factor must be integer')
+  end
+  self.inputSize = torch.LongStorage(4)
+  self.outputSize = torch.LongStorage(4)
+  self.usage = nil
 end
 
 function SpatialUpSamplingNearest:updateOutput(input)
-   if input:dim() ~= 4 and input:dim() ~= 3 then
-     error('SpatialUpSamplingNearest only support 3D or 4D tensors')
-   end
-   -- Copy the input size
-   local xdim = input:dim()
-   local ydim = input:dim() - 1
-   for i = 1, input:dim() do
-     self.inputSize[i] = input:size(i)
-     self.outputSize[i] = input:size(i)
-   end
-   self.outputSize[ydim] = self.outputSize[ydim] * self.scale_factor
-   self.outputSize[xdim] = self.outputSize[xdim] * self.scale_factor
-   -- Resize the output if needed
-   if input:dim() == 3 then
-     self.output:resize(self.outputSize[1], self.outputSize[2],
-       self.outputSize[3])
-   else
-     self.output:resize(self.outputSize)
-   end
-   input.nn.SpatialUpSamplingNearest_updateOutput(self, input)
-   return self.output
+  if input:dim() ~= 4 and input:dim() ~= 3 then
+    error('SpatialUpSamplingNearest only support 3D or 4D tensors')
+  end
+  -- Copy the input size
+  local xdim = input:dim()
+  local ydim = input:dim() - 1
+  for i = 1, input:dim() do
+    self.inputSize[i] = input:size(i)
+    self.outputSize[i] = input:size(i)
+  end
+  self.outputSize[ydim] = self.outputSize[ydim] * self.scale_factor
+  self.outputSize[xdim] = self.outputSize[xdim] * self.scale_factor
+  -- Resize the output if needed
+  if input:dim() == 3 then
+    self.output:resize(self.outputSize[1], self.outputSize[2],
+      self.outputSize[3])
+  else
+    self.output:resize(self.outputSize)
+  end
+  input.nn.SpatialUpSamplingNearest_updateOutput(self, input)
+  return self.output
 end
 
 function SpatialUpSamplingNearest:updateGradInput(input, gradOutput)
-   self.gradInput:resizeAs(input)
-   input.nn.SpatialUpSamplingNearest_updateGradInput(self, input, gradOutput)
-   return self.gradInput
+  self.gradInput:resizeAs(input)
+  input.nn.SpatialUpSamplingNearest_updateGradInput(self, input, gradOutput)
+  return self.gradInput
 end
