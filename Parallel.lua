@@ -10,8 +10,8 @@ end
 function Parallel:updateOutput(input)
   local nModule=input:size(self.inputDimension)
   local outputs = {}
-   self.totalOutputSize = self.totalOutputSize or torch.LongStorage()
-   local totalOutputSize = self.totalOutputSize
+  self.totalOutputSize = self.totalOutputSize or torch.LongStorage()
+  local totalOutputSize = self.totalOutputSize
 
   for i=1,nModule do
     local currentInput = input:select(self.inputDimension,i)
