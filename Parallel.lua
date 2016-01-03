@@ -20,13 +20,13 @@ function Parallel:updateOutput(input)
     local outputSize = currentOutput:size(self.outputDimension)
     
     if i == 1 then
-         totalOutputSize:resize(currentOutput:dim()):copy(currentOutput:size())
+      totalOutputSize:resize(currentOutput:dim()):copy(currentOutput:size())
     else
-         totalOutputSize[self.outputDimension] = totalOutputSize[self.outputDimension] + outputSize
+      totalOutputSize[self.outputDimension] = totalOutputSize[self.outputDimension] + outputSize
     end
     
   end
-   self.output:resize(totalOutputSize)
+  self.output:resize(totalOutputSize)
   
   local offset = 1
   for i=1,nModule do
