@@ -8,19 +8,19 @@ end
 
 function SplitTable:_getPositiveDimension(input)
   local dimension = self.dimension
-   if dimension < 0 then
-      dimension = input:dim() + dimension + 1
-   elseif self.nInputDims and input:dim()==(self.nInputDims+1) then
-      dimension = dimension + 1
+  if dimension < 0 then
+    dimension = input:dim() + dimension + 1
+  elseif self.nInputDims and input:dim()==(self.nInputDims+1) then
+    dimension = dimension + 1
   end
-   return dimension
+  return dimension
 end
 
 function SplitTable:updateOutput(input)
-   local dimension = self:_getPositiveDimension(input)
+  local dimension = self:_getPositiveDimension(input)
   local slices = input:size(dimension)
-
-   local currentOutput= {}
+  
+  local currentOutput= {}
    for i=1,slices do
     currentOutput[#currentOutput+1] = input:select(dimension,i)
    end
@@ -29,7 +29,7 @@ function SplitTable:updateOutput(input)
 end 
 
 function SplitTable:updateGradInput(input, gradOutput)
-   local dimension = self:_getPositiveDimension(input)
+  local dimension = self:_getPositiveDimension(input)
   local slices = input:size(dimension)
    self.gradInput:resizeAs(input)
 
