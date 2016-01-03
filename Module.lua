@@ -114,7 +114,7 @@ function Module:clone(...)
 end
 
 function Module:type(type, tensorCache)
-   assert(type, 'Module: must provide a type to convert to')
+  assert(type, 'Module: must provide a type to convert to')
 
    tensorCache = tensorCache or {}
 
@@ -237,7 +237,7 @@ function Module.flatten(parameters)
    for k = 1,#parameters do
        parameters[k]:set(Tensor())
    end
-
+  
    -- 6. compact the flattened parameters if there were holes
    if nUsedParameters ~= nParameters then
       assert(tensorsCompact,
