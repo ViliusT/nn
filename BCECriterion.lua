@@ -45,9 +45,9 @@ function BCECriterion:updateOutput(input, target)
   -- log(input) * target
   buffer:add(input, eps):log()
 if weights ~= nil then buffer:cmul(weights) end
-
+  
   output = torch.dot(target, buffer)
-
+  
   -- log(1 - input) * (1 - target)
   buffer:mul(input, -1):add(1):add(eps):log()
 if weights ~= nil then buffer:cmul(weights) end
