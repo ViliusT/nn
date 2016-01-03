@@ -110,7 +110,7 @@ function CosineEmbeddingCriterion:updateGradInput(input, y)
   self._idx = self._idx:view(-1,1):expand(gw1:size())
   gw1[self._idx] = 0
   gw2[self._idx] = 0
-
+  
   y.eq(self._idx,y,1)
   self._idx = self._idx:view(-1,1):expand(gw2:size())
   gw1[self._idx] = gw1[self._idx]:mul(-1)
@@ -119,7 +119,7 @@ function CosineEmbeddingCriterion:updateGradInput(input, y)
   if self.sizeAverage then
     gw1:div(y:size(1))
     gw2:div(y:size(1))
-   end
+  end
   
   if not_batch then
     self.gradInput[1]:resize(gw1:size(2))
