@@ -55,10 +55,10 @@ function SparseLinear:accGradParameters(input, gradOutput, scale)
 end
 
 function SparseLinear:updateGradInput(input, gradOutput)
-   if self.gradInput then
+if self.gradInput then
       input.nn.SparseLinear_updateGradInput(self, input, gradOutput)
-      return self.gradInput
-   end
+  return self.gradInput
+end
 end
 
 function SparseLinear:updateParameters(learningRate)
