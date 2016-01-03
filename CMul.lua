@@ -25,12 +25,12 @@ function CMul:__init(...)
 end
  
 function CMul:reset(stdv)
-   if stdv then
-      stdv = stdv * math.sqrt(3)
-   else
+  if stdv then
+    stdv = stdv * math.sqrt(3)
+  else
     stdv = 1./math.sqrt(self.weight:nElement())
-   end
-   self.weight:uniform(-stdv,stdv)
+  end
+  self.weight:uniform(-stdv,stdv)
 end
 
 function CMul:updateOutput(input)
@@ -40,13 +40,13 @@ function CMul:updateOutput(input)
   self._expand = self._expand or input.new()
   self._repeat = self._repeat or input.new()
   
-   self.output:resizeAs(input):copy(input)
-   if input:nElement() == self.weight:nElement() then
+  self.output:resizeAs(input):copy(input)
+  if input:nElement() == self.weight:nElement() then
     self._output:view(self.output, -1)
     self._weight:view(self.weight, -1)
     
     self._output:cmul(self._weight)
-   else
+  else
     local batchSize = input:size(1)
     self._output:view(self.output, batchSize, -1)
     self._weight:view(self.weight, 1, -1)
@@ -56,10 +56,10 @@ function CMul:updateOutput(input)
     if torch.type(input) == 'torch.CudaTensor' then
       self._repeat:resizeAs(self._expand):copy(self._expand)
       self._output:cmul(self._repeat)
-      else
+    else
       self._output:cmul(self._expand)
-      end
-   end
+    end
+  end
   
    return self.output
 end
@@ -85,9 +85,9 @@ function CMul:updateGradInput(input, gradOutput)
     if torch.type(input) == 'torch.CudaTensor' then
       self._repeat:resizeAs(self._expand):copy(self._expand)
       self._gradInput:addcmul(1, self._repeat, self._gradOutput)
-      else
+    else
       self._gradInput:addcmul(1, self._expand, self._gradOutput)
-      end
+    end
    end
   
   return self.gradInput
@@ -100,10 +100,10 @@ function CMul:accGradParameters(input, gradOutput, scale)
   self._gradWeight = self._gradWeight or input.new()
   self._sum = self._sum or input.new()
   
-   if self.weight:nElement() == gradOutput:nElement() then
+  if self.weight:nElement() == gradOutput:nElement() then
     self.gradWeight:addcmul(scale, input, gradOutput)
-   else
-      local batchSize = input:size(1)
+  else
+    local batchSize = input:size(1)
     self._input:view(input, batchSize, -1)
     self._gradOutput:view(gradOutput, batchSize, -1)
     self._gradWeight:view(self.gradWeight, 1, -1)
@@ -123,6 +123,6 @@ function CMul:type(type, tensorCache)
     self._expand = nil
     self._repeat = nil
     self._sum = nil
-   end
+  end
    return parent.type(self, type, tensorCache)
 end
