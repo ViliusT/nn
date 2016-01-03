@@ -1845,12 +1845,12 @@ mytester:asserteq(0, berr, torch.typename(module) .. ' - i/o backward err ')
 end
 
 function nntest.SpatialConvolutionMM()
-   local from = math.random(2,5)
+local from = math.random(2,5)
 local to = math.random(1,5)
-   local ki = math.random(1,5)
-   local kj = math.random(1,5)
-   local di =  math.random(1,4)
-   local dj =  math.random(1,4)
+local ki = math.random(1,5)
+local kj = math.random(1,5)
+local di =  math.random(1,4)
+local dj =  math.random(1,4)
 local padW = math.random(0,2)
 local padH = math.random(0,2)
 local outi = math.random(5,9)
@@ -2073,20 +2073,20 @@ for t,err in pairs(jac.testAllUpdate(module, input, 'bias', 'gradBias')) do
 end
 
 local ferr, berr = jac.testIO(module, input)
-   mytester:asserteq(0, ferr, torch.typename(module) .. ' - i/o forward err ')
-   mytester:asserteq(0, berr, torch.typename(module) .. ' - i/o backward err ')
+mytester:asserteq(0, ferr, torch.typename(module) .. ' - i/o forward err ')
+mytester:asserteq(0, berr, torch.typename(module) .. ' - i/o backward err ')
 
 
 
-    -- batch
+-- batch
 
-   --verbose = true
-   local batch = math.random(2,6)
-   module = nn.SpatialConvolutionMap(nn.tables.random(from, to, fanin), ki, kj, si, sj)
-   input = torch.Tensor(batch,from,inj,ini):zero()
+--verbose = true
+local batch = math.random(2,6)
+module = nn.SpatialConvolutionMap(nn.tables.random(from, to, fanin), ki, kj, si, sj)
+input = torch.Tensor(batch,from,inj,ini):zero()
 
-   local err = jac.testJacobian(module, input)
-   mytester:assertlt(err, precision, 'batch error on state ')
+local err = jac.testJacobian(module, input)
+mytester:assertlt(err, precision, 'batch error on state ')
 
    local err = jac.testJacobianParameters(module, input, module.weight, module.gradWeight)
    mytester:assertlt(err , precision, 'batch error on weight ')
