@@ -114,7 +114,7 @@ function nntest.CMul()
    local output = module:forward(input)
    local output2 = torch.cmul(input, module.weight:view(1,ini,inj,ink):expandAs(input))
    mytester:assertTensorEq(output2, output, 0.000001, 'CMul forward 2D err')
-
+    
    module:zeroGradParameters()
    local gradWeight = module.gradWeight:clone()
    local gradInput = module:backward(input, output)
@@ -123,7 +123,7 @@ function nntest.CMul()
    gradInput2:view(input:size(1), -1):addcmul(1, module.weight:view(1,-1):expandAs(outputView), outputView)
    mytester:assertTensorEq(gradInput2, gradInput, 0.000001, 'CMul updateGradInput 2D err')
    mytester:assert(gradInput:isSameSizeAs(input), 'CMul gradInput 2D size err')
-
+    
    local inputView = input:view(nframe, -1)
    local gradWeightView = gradWeight:view(1, -1)
    for i=1,nframe do
@@ -131,7 +131,7 @@ function nntest.CMul()
    end
    mytester:assertTensorEq(gradWeight, module.gradWeight, 0.000001, 'CMul accGradParameters 2D err')
    mytester:assert(module.weight:isSameSizeAs(module.gradWeight), 'CMul gradWeight size err')
-
+    
    input:zero()
 
    local err = jac.testJacobian(module,input)
@@ -3112,7 +3112,7 @@ function nntest.VolumetricConvolutionBatchCompare()
    local module = nn.VolumetricConvolution(from, to, kt, ki, kj, st, si, sj, padT, padW, padH)
    module:zeroGradParameters()
    local input = torch.randn(from, int, inj, ini)
-   batchcompare(module,input, {'weight','bias','gradWeight','gradBias'})
+batchcompare(module,input, {'weight','bias','gradWeight','gradBias'})
 end
 
 function nntest.VolumetricAveragePooling()
@@ -3435,7 +3435,7 @@ function nntest.Module_listModules()
 
    for i,module in ipairs(modules) do
       mytester:assert(torch.type(module) == torch.type(modules2[i]), 'module error')
-   end
+end
 end
 
 function nntest.PairwiseDistance()
@@ -4614,23 +4614,23 @@ function nntest.HingeEmbeddingCriterion()
 end
 
 function nntest.Replicate()
-   local vector = torch.rand(3)
+local vector = torch.rand(3)
 
-   local r1 = nn.Replicate(2, 1)
-   local r2 = nn.Replicate(2, 2)
+local r1 = nn.Replicate(2, 1)
+local r2 = nn.Replicate(2, 2)
 
-   local vOutput1 = r1:forward(vector):clone()
-   local vOutput2 = r2:forward(vector):clone()
+local vOutput1 = r1:forward(vector):clone()
+local vOutput2 = r2:forward(vector):clone()
 
-   local expected1 = torch.zeros(2, 3)
-   local expected2 = torch.zeros(3, 2)
-   expected1:select(1, 1):copy(vector)
-   expected1:select(1, 2):copy(vector)
-   expected2:select(2, 1):copy(vector)
-   expected2:select(2, 2):copy(vector)
+local expected1 = torch.zeros(2, 3)
+local expected2 = torch.zeros(3, 2)
+expected1:select(1, 1):copy(vector)
+expected1:select(1, 2):copy(vector)
+expected2:select(2, 1):copy(vector)
+expected2:select(2, 2):copy(vector)
 
-   mytester:assertTensorEq(vOutput1, expected1, precision, 'Wrong tiling of data when replicating vector.')
-   mytester:assertTensorEq(vOutput2, expected2, precision, 'Wrong tiling of data when replicating vector.')
+mytester:assertTensorEq(vOutput1, expected1, precision, 'Wrong tiling of data when replicating vector.')
+mytester:assertTensorEq(vOutput2, expected2, precision, 'Wrong tiling of data when replicating vector.')
 
    -- batch mode
    local vector = torch.rand(4,3)
