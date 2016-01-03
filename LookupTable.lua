@@ -50,7 +50,7 @@ function LookupTable:updateOutput(input)
    self:backCompatibility()
    input = self:makeInputContiguous(input)
   if input:dim() == 1 then
-      self.output:index(self.weight, 1, input)
+    self.output:index(self.weight, 1, input)
   elseif input:dim() == 2 then
       self.output:index(self.weight, 1, input:view(-1))
       self.output = self.output:view(input:size(1), input:size(2), self.weight:size(2))
