@@ -31,9 +31,9 @@ function nn.hessian.enable()
       module[gwname] = hwval
       module[hwname] = gwval
     end
-      local oldOutput = module.output
-      module.output = module.output.new():resizeAs(oldOutput)
-      module.forward(module, module.inputSq)
+    local oldOutput = module.output
+    module.output = module.output.new():resizeAs(oldOutput)
+    module.forward(module, module.inputSq)
     module.accGradParameters(module, module.inputSq, diagHessianOutput, 1)
     -- put back gradients
     for i=1,#gw do
@@ -44,7 +44,7 @@ function nn.hessian.enable()
       module[gwname] = hwval
       module[hwname] = gwval
     end
-      module.output = oldOutput
+    module.output = oldOutput
   end
   nn.hessian.accDiagHessianParameters = accDiagHessianParameters
   
@@ -214,7 +214,7 @@ function nn.hessian.enable()
   end
   
   function nn.SpatialConvolution.initDiagHessianParameters(self)
-      initDiagHessianParameters(self,{'gradWeight','gradBias'},{'diagHessianWeight','diagHessianBias'})
+    initDiagHessianParameters(self,{'gradWeight','gradBias'},{'diagHessianWeight','diagHessianBias'})
   end
   
   ----------------------------------------------------------------------
@@ -226,7 +226,7 @@ function nn.hessian.enable()
    end
 
    function nn.SpatialFullConvolution.accDiagHessianParameters(self, input, diagHessianOutput)
-      accDiagHessianParameters(self,input, diagHessianOutput, {'gradWeight','gradBias'}, {'diagHessianWeight','diagHessianBias'})
+    accDiagHessianParameters(self,input, diagHessianOutput, {'gradWeight','gradBias'}, {'diagHessianWeight','diagHessianBias'})
    end
 
    function nn.SpatialFullConvolution.initDiagHessianParameters(self)
@@ -329,14 +329,14 @@ function nn.hessian.enable()
     -- get parameters
     local parameters,gradParameters,hessianParameters = self:parameters()
     -- flatten parameters and gradients
-      local flatParameters = nn.Module.flatten(parameters)
-      collectgarbage()
-      local flatGradParameters = nn.Module.flatten(gradParameters)
-      collectgarbage()
+    local flatParameters = nn.Module.flatten(parameters)
+    collectgarbage()
+    local flatGradParameters = nn.Module.flatten(gradParameters)
+    collectgarbage()
     local flatHessianParameters
     if hessianParameters and hessianParameters[1] then
-         flatHessianParameters = nn.Module.flatten(hessianParameters)
-         collectgarbage()
+      flatHessianParameters = nn.Module.flatten(hessianParameters)
+      collectgarbage()
     end
     
     -- return new flat vector that contains all discrete parameters

@@ -654,15 +654,15 @@ function nntest.Linear()
 
      nn.hessian.enable()
 
-     local err = jac.testDiagHessianInput(module, input)
-     mytester:assertlt(err , precision, 'error on diagHessianInput')
-
-     local err = jac.testDiagHessianWeight(module, input)
-     mytester:assertlt(err , precision, 'error on diagHessianWeight')
-
-     local err = jac.testDiagHessianBias(module, input)
-     mytester:assertlt(err , precision, 'error on diagHessianBias')
-
+      local err = jac.testDiagHessianInput(module, input)
+      mytester:assertlt(err , precision, 'error on diagHessianInput')
+      
+      local err = jac.testDiagHessianWeight(module, input)
+      mytester:assertlt(err , precision, 'error on diagHessianWeight')
+      
+      local err = jac.testDiagHessianBias(module, input)
+      mytester:assertlt(err , precision, 'error on diagHessianBias')
+      
      for t,err in pairs(jac.testAllUpdate(module, input, 'weight', 'gradWeight')) do
         mytester:assertlt(err, precision, string.format(
                            'error on weight [%s]', t))
@@ -692,15 +692,15 @@ function nntest.Linear()
      local err = jac.testJacobianUpdateParameters(module, input, module.bias)
      mytester:assertlt(err,precision, 'error on bias [direct update] ')
 
-     local err = jac.testDiagHessianInput(module, input)
-     mytester:assertlt(err , precision, 'error on diagHessianInput')
-
-     local err = jac.testDiagHessianWeight(module, input)
-     mytester:assertlt(err , precision, 'error on diagHessianWeight')
-
-     local err = jac.testDiagHessianBias(module, input)
-     mytester:assertlt(err , precision, 'error on diag HessianBias')
-
+      local err = jac.testDiagHessianInput(module, input)
+      mytester:assertlt(err , precision, 'error on diagHessianInput')
+      
+      local err = jac.testDiagHessianWeight(module, input)
+      mytester:assertlt(err , precision, 'error on diagHessianWeight')
+      
+      local err = jac.testDiagHessianBias(module, input)
+      mytester:assertlt(err , precision, 'error on diag HessianBias')
+      
      for t,err in pairs(jac.testAllUpdate(module, input, 'weight', 'gradWeight')) do
         mytester:assertlt(err, precision, string.format(
                            'error on weight [%s]', t))
@@ -1771,14 +1771,14 @@ local outj = math.random(5,7)
 
    nn.hessian.enable()
 
-   local err = jac.testDiagHessianInput(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianInput')
+local err = jac.testDiagHessianInput(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianInput')
 
-   local err = jac.testDiagHessianWeight(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianWeight')
+local err = jac.testDiagHessianWeight(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianWeight')
 
-   local err = jac.testDiagHessianBias(module, input)
-   mytester:assertlt(err , precision, 'error on diag HessianBias')
+local err = jac.testDiagHessianBias(module, input)
+mytester:assertlt(err , precision, 'error on diag HessianBias')
 
    for t,err in pairs(jac.testAllUpdate(module, input, 'weight', 'gradWeight')) do
       mytester:assertlt(err, precision, string.format(
@@ -1820,14 +1820,14 @@ local outj = math.random(5,7)
    local err = jac.testJacobianUpdateParameters(module, input, module.bias)
    mytester:assertlt(err , precision, 'batch error on bias [direct update] ')
 
-   local err = jac.testDiagHessianInput(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianInput')
+local err = jac.testDiagHessianInput(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianInput')
 
-   local err = jac.testDiagHessianWeight(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianWeight')
+local err = jac.testDiagHessianWeight(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianWeight')
 
-   local err = jac.testDiagHessianBias(module, input)
-   mytester:assertlt(err , precision, 'error on diag HessianBias')
+local err = jac.testDiagHessianBias(module, input)
+mytester:assertlt(err , precision, 'error on diag HessianBias')
 
    for t,err in pairs(jac.testAllUpdate(module, input, 'weight', 'gradWeight')) do
       mytester:assertlt(err, precision, string.format(
@@ -2053,14 +2053,14 @@ local outj = math.random(5,9)
 
    nn.hessian.enable()
 
-   local err = jac.testDiagHessianInput(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianInput')
+local err = jac.testDiagHessianInput(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianInput')
 
-   local err = jac.testDiagHessianWeight(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianWeight')
+local err = jac.testDiagHessianWeight(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianWeight')
 
-   local err = jac.testDiagHessianBias(module, input)
-   mytester:assertlt(err , precision, 'error on diag HessianBias')
+local err = jac.testDiagHessianBias(module, input)
+mytester:assertlt(err , precision, 'error on diag HessianBias')
 
    for t,err in pairs(jac.testAllUpdate(module, input, 'weight', 'gradWeight')) do
       mytester:assertlt(err, precision, string.format(
@@ -2100,14 +2100,14 @@ local outj = math.random(5,9)
    local err = jac.testJacobianUpdateParameters(module, input, module.bias)
    mytester:assertlt(err , precision, 'batch error on bias [direct update] ')
 
-   local err = jac.testDiagHessianInput(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianInput')
+local err = jac.testDiagHessianInput(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianInput')
 
-   local err = jac.testDiagHessianWeight(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianWeight')
+local err = jac.testDiagHessianWeight(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianWeight')
 
-   local err = jac.testDiagHessianBias(module, input)
-   mytester:assertlt(err , precision, 'error on diag HessianBias')
+local err = jac.testDiagHessianBias(module, input)
+mytester:assertlt(err , precision, 'error on diag HessianBias')
 
    for t,err in pairs(jac.testAllUpdate(module, input, 'weight', 'gradWeight')) do
       mytester:assertlt(err, precision, string.format(
@@ -2156,14 +2156,14 @@ local inj = math.random(5,7)
 
    nn.hessian.enable()
 
-   local err = jac.testDiagHessianInput(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianInput')
+local err = jac.testDiagHessianInput(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianInput')
 
-   local err = jac.testDiagHessianWeight(module, input)
-   mytester:assertlt(err , precision, 'error on diagHessianWeight')
+local err = jac.testDiagHessianWeight(module, input)
+mytester:assertlt(err , precision, 'error on diagHessianWeight')
 
-   local err = jac.testDiagHessianBias(module, input)
-   mytester:assertlt(err , precision, 'error on diag HessianBias')
+local err = jac.testDiagHessianBias(module, input)
+mytester:assertlt(err , precision, 'error on diag HessianBias')
 
    for t,err in pairs(jac.testAllUpdate(module, input, 'weight', 'gradWeight')) do
       mytester:assertlt(err, precision, string.format(

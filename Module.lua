@@ -182,31 +182,31 @@ function Module.flatten(parameters)
       return t:isContiguous()
   end
   
-   if not parameters or #parameters == 0 then
-      return torch.Tensor()
-   end
-   local Tensor = parameters[1].new
+  if not parameters or #parameters == 0 then
+    return torch.Tensor()
+  end
+  local Tensor = parameters[1].new
    local TmpTensor = Module._flattenTensorBuffer[torch.type(parameters[1])] or Tensor
-
+  
    -- 1. construct the set of all unique storages referenced by parameter tensors
-   local storages = {}
-   local nParameters = 0
+  local storages = {}
+  local nParameters = 0
    local parameterMeta = {}
-   for k = 1,#parameters do
+  for k = 1,#parameters do
       local param = parameters[k]
-      local storage = parameters[k]:storage()
+    local storage = parameters[k]:storage()
       local storageKey = torch.pointer(storage)
 
       if not storages[storageKey] then
          storages[storageKey] = {storage, nParameters}
-         nParameters = nParameters + storage:size()
+      nParameters = nParameters + storage:size()
       end
 
       parameterMeta[k] = {storageOffset = param:storageOffset() +
                                           storages[storageKey][2],
                           size          = param:size(),
                           stride        = param:stride()}
-   end
+  end
   
    -- 2. construct a single tensor that will hold all the parameters
    local flatParameters = TmpTensor(nParameters):zero()
@@ -214,29 +214,29 @@ function Module.flatten(parameters)
    -- 3. determine if there are elements in the storage that none of the
    --    parameter tensors reference ('holes')
    local tensorsCompact = true
-   for k = 1,#parameters do
+  for k = 1,#parameters do
       local meta = parameterMeta[k]
       local tmp = TmpTensor():set(
          flatParameters:storage(), meta.storageOffset, meta.size, meta.stride)
       tmp:fill(1)
       tensorsCompact = tensorsCompact and isCompact(tmp)
-   end
+  end
   
    local maskParameters  = flatParameters:byte():clone()
    local compactOffsets  = flatParameters:long():cumsum(1)
    local nUsedParameters = compactOffsets[-1]
-
+  
    -- 4. copy storages into the flattened parameter tensor
    for _, storageAndOffset in pairs(storages) do
       local storage, offset = table.unpack(storageAndOffset)
       flatParameters[{{offset+1,offset+storage:size()}}]:copy(Tensor():set(storage))
-   end
+  end
   
    -- 5. allow garbage collection
    storages = nil
    for k = 1,#parameters do
        parameters[k]:set(Tensor())
-   end
+  end
   
    -- 6. compact the flattened parameters if there were holes
    if nUsedParameters ~= nParameters then
@@ -267,8 +267,8 @@ function Module.flatten(parameters)
 end
 
 function Module:getParameters()
-   -- get parameters
-   local parameters,gradParameters = self:parameters()
+  -- get parameters
+  local parameters,gradParameters = self:parameters()
    return Module.flatten(parameters), Module.flatten(gradParameters)
 end
 
