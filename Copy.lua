@@ -1,8 +1,8 @@
 local Copy, parent = torch.class('nn.Copy', 'nn.Module')
 
 function Copy:__init(intype, outtype, forceCopy, dontCast)
-   intype = intype or torch.Tensor.__typename
-   outtype = outtype or torch.Tensor.__typename
+  intype = intype or torch.Tensor.__typename
+  outtype = outtype or torch.Tensor.__typename
 
    self.dontCast = dontCast
 
