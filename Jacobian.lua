@@ -69,8 +69,8 @@ function nn.Jacobian.forward(module, input, param, perturbation)
   -- perturbation amount
   perturbation = perturbation or 1e-6
   -- 1D view of input
-   --local tst = param:storage()
-   local sin = param.new(param):resize(param:nElement())--param.new(tst,1,tst:size())
+  --local tst = param:storage()
+  local sin = param.new(param):resize(param:nElement())--param.new(tst,1,tst:size())
   -- jacobian matrix to calculate
   local jacobian = torch.Tensor():resize(param:nElement(),module:forward(input):nElement())
   
@@ -200,8 +200,8 @@ function nn.Jacobian.forwardUpdate(module, input, param, perturbation)
   -- perturbation amount
   perturbation = perturbation or 1e-6
   -- 1D view of input
-   --local tst = param:storage()
-   local sin =  param.new(param):resize(param:nElement())--param.new(tst,1,tst:size())
+  --local tst = param:storage()
+  local sin =  param.new(param):resize(param:nElement())--param.new(tst,1,tst:size())
   -- jacobian matrix to calculate
   local jacobian = torch.Tensor():resize(param:nElement(),module:forward(input):nElement())
   
@@ -310,7 +310,7 @@ function nn.Jacobian.testIO(module,input, minval, maxval)
   -- read module
   local m = torch.DiskFile(filename):binary():readObject()
   m:forward(input)
-   m:zeroGradParameters()
+  m:zeroGradParameters()
   m:updateGradInput(input,go)
   m:accGradParameters(input,go)
   -- cleanup

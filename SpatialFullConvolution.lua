@@ -2,40 +2,40 @@ local SpatialFullConvolution, parent = torch.class('nn.SpatialFullConvolution','
 
 function SpatialFullConvolution:__init(nInputPlane, nOutputPlane,
                                        kW, kH, dW, dH, padW, padH)
-   parent.__init(self)
-
-   dW = dW or 1
-   dH = dH or 1
-
-   self.nInputPlane = nInputPlane
-   self.nOutputPlane = nOutputPlane
-   self.kW = kW
-   self.kH = kH
-   self.dW = dW
-   self.dH = dH
+  parent.__init(self)
+  
+  dW = dW or 1
+  dH = dH or 1
+  
+  self.nInputPlane = nInputPlane
+  self.nOutputPlane = nOutputPlane
+  self.kW = kW
+  self.kH = kH
+  self.dW = dW
+  self.dH = dH
    self.padW = padW or 0
    self.padH = padH or 0
-
-   self.weight = torch.Tensor(nInputPlane, nOutputPlane, kH, kW)
-   self.gradWeight = torch.Tensor(nInputPlane, nOutputPlane, kH, kW)
-   self.bias = torch.Tensor(self.nOutputPlane)
-   self.gradBias = torch.Tensor(self.nOutputPlane)
-
+  
+  self.weight = torch.Tensor(nInputPlane, nOutputPlane, kH, kW)
+  self.gradWeight = torch.Tensor(nInputPlane, nOutputPlane, kH, kW)
+  self.bias = torch.Tensor(self.nOutputPlane)
+  self.gradBias = torch.Tensor(self.nOutputPlane)
+  
    self.finput = torch.Tensor()
    self.fgradInput = torch.Tensor()
 
-   self:reset()
+  self:reset()
 end
 
 function SpatialFullConvolution:reset(stdv)
-   if stdv then
-      stdv = stdv * math.sqrt(3)
-   else
-      local nInputPlane = self.nInputPlane
-      local kH = self.kH
-      local kW = self.kW
-      stdv = 1/math.sqrt(kW*kH*nInputPlane)
-   end
+  if stdv then
+    stdv = stdv * math.sqrt(3)
+  else
+    local nInputPlane = self.nInputPlane
+    local kH = self.kH
+    local kW = self.kW
+    stdv = 1/math.sqrt(kW*kH*nInputPlane)
+  end
    self.weight:uniform(-stdv, stdv)
    self.bias:uniform(-stdv, stdv)
 end

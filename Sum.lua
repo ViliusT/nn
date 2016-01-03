@@ -20,9 +20,9 @@ end
 
 function Sum:updateOutput(input)
   local dimension = self:_getPositiveDimension(input)
-   if type(self.output) == 'number' then
-      self.output = input.new()
-   end
+  if type(self.output) == 'number' then
+    self.output = input.new()
+  end
   self.output:sum(input, dimension)
   if self.output:nDimension() > 1 then
     self.output = self.output:select(dimension, 1)
