@@ -11,7 +11,7 @@ function MixtureTable:__init(dim)
 end
 
 function MixtureTable:updateOutput(input)
-   local gaterInput, expertInputs = table.unpack(input)
+  local gaterInput, expertInputs = table.unpack(input)
   
   -- buffers
   self._gaterView = self._gaterView or input[1].new()
@@ -73,9 +73,9 @@ function MixtureTable:updateOutput(input)
 end
 
 function MixtureTable:updateGradInput(input, gradOutput)
-   local gaterInput, expertInputs = table.unpack(input)
+  local gaterInput, expertInputs = table.unpack(input)
   nn.utils.recursiveResizeAs(self.gradInput, input)
-   local gaterGradInput, expertGradInputs = table.unpack(self.gradInput)
+  local gaterGradInput, expertGradInputs = table.unpack(self.gradInput)
   
   -- buffers
   self._sum = self._sum or input[1].new()

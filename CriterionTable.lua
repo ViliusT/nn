@@ -7,7 +7,7 @@ function CriterionTable:__init(criterion)
 end
 
 function CriterionTable:updateOutput(input)
-   self.output = self.criterion:updateOutput(table.unpack(input))
+  self.output = self.criterion:updateOutput(table.unpack(input))
   return self.output
 end
 
