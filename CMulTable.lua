@@ -23,11 +23,11 @@ function CMulTable:updateGradInput_efficient(input, gradOutput)
     self.tout:copy(self.output):cdiv(input[i])
     self.gradInput[i]:cmul(self.tout)
    end
-
-   for i=#input+1, #self.gradInput do
-       self.gradInput[i] = nil
-   end
-
+  
+  for i=#input+1, #self.gradInput do
+    self.gradInput[i] = nil
+  end
+  
    return self.gradInput
 end
 
@@ -41,10 +41,10 @@ function CMulTable:updateGradInput(input, gradOutput)
          end
       end
    end
-
-   for i=#input+1, #self.gradInput do
-       self.gradInput[i] = nil
-   end
-
+  
+  for i=#input+1, #self.gradInput do
+    self.gradInput[i] = nil
+  end
+  
    return self.gradInput
 end

@@ -3,27 +3,27 @@
 local Container, parent = torch.class('nn.Container', 'nn.Module')
 
 function Container:__init(...)
-    parent.__init(self, ...)
-    self.modules = {}
+  parent.__init(self, ...)
+  self.modules = {}
 end
 
 function Container:add(module)
-    table.insert(self.modules, module)
-    return self
+  table.insert(self.modules, module)
+  return self
 end
 
 function Container:get(index)
-    return self.modules[index]
+  return self.modules[index]
 end
 
 function Container:size()
-    return #self.modules
+  return #self.modules
 end
 
 function Container:applyToModules(func)
   for _, module in ipairs(self.modules) do
     func(module)
-    end
+  end
 end
 
 function Container:zeroGradParameters()
@@ -45,9 +45,9 @@ function Container:evaluate()
 end
 
 function Container:share(mlp, ...)
-    for i=1,#self.modules do
-        self.modules[i]:share(mlp.modules[i], ...);
-    end
+  for i=1,#self.modules do
+    self.modules[i]:share(mlp.modules[i], ...);
+  end
 end
 
 function Container:reset(stdv)
@@ -55,23 +55,23 @@ function Container:reset(stdv)
 end
 
 function Container:parameters()
-    local function tinsert(to, from)
-        if type(from) == 'table' then
-            for i=1,#from do
-                tinsert(to,from[i])
-            end
-        else
-            table.insert(to,from)
-        end
+  local function tinsert(to, from)
+    if type(from) == 'table' then
+      for i=1,#from do
+        tinsert(to,from[i])
+      end
+    else
+      table.insert(to,from)
     end
-    local w = {}
-    local gw = {}
-    for i=1,#self.modules do
-        local mw,mgw = self.modules[i]:parameters()
-        if mw then
-            tinsert(w,mw)
-            tinsert(gw,mgw)
-        end
+  end
+  local w = {}
+  local gw = {}
+  for i=1,#self.modules do
+    local mw,mgw = self.modules[i]:parameters()
+    if mw then
+      tinsert(w,mw)
+      tinsert(gw,mgw)
     end
-    return w,gw
+  end
+  return w,gw
 end

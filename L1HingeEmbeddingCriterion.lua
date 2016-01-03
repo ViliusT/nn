@@ -3,7 +3,7 @@ local L1HingeEmbeddingCriterion, parent = torch.class('nn.L1HingeEmbeddingCriter
 function L1HingeEmbeddingCriterion:__init(margin)
    parent.__init(self)
   margin = margin or 1
-   self.margin = margin
+  self.margin = margin
    self.gradInput = {torch.Tensor(), torch.Tensor()}
 end
 

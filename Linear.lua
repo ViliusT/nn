@@ -47,7 +47,7 @@ function Linear:updateOutput(input)
       self.addBuffer = self.addBuffer or input.new()
       if self.addBuffer:nElement() ~= nframe then
          self.addBuffer:resize(nframe):fill(1)
-      end
+  end
   self.output:addmm(0, self.output, 1, input, self.weight:t())
   self.output:addr(1, self.addBuffer, self.bias)
    else
@@ -79,7 +79,7 @@ function Linear:accGradParameters(input, gradOutput, scale)
    scale = scale or 1
    if input:dim() == 1 then
       self.gradWeight:addr(scale, gradOutput, input)
-      self.gradBias:add(scale, gradOutput)
+  self.gradBias:add(scale, gradOutput)
    elseif input:dim() == 2 then
   self.gradWeight:addmm(scale, gradOutput:t(), input)
   self.gradBias:addmv(scale, gradOutput:t(), self.addBuffer)

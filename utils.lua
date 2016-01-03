@@ -129,7 +129,7 @@ function nn.utils.addSingletonDimension(t, dim)
   assert(torch.isTensor(t), "input tensor expected")
   local dim = dim or 1
   assert(dim > 0 and dim <= (t:dim() + 1), "invalid dimension: " .. dim
-             .. '. Tensor is of ' .. t:dim() .. ' dimensions.')
+    .. '. Tensor is of ' .. t:dim() .. ' dimensions.')
   
   local view = t.new()
   local size = torch.LongStorage(t:dim() + 1)

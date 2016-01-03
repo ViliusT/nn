@@ -12,12 +12,12 @@ function LookupTable:__init(nIndex, nOutput)
 end
 
 function LookupTable:backCompatibility()
-    self._count = self._count or torch.IntTensor()
-    self._input = self._input or torch.LongTensor()
-
-    if self.shouldScaleGradByFreq == nil then
-        self.shouldScaleGradByFreq = false
-    end
+  self._count = self._count or torch.IntTensor()
+  self._input = self._input or torch.LongTensor()
+  
+  if self.shouldScaleGradByFreq == nil then
+    self.shouldScaleGradByFreq = false
+  end
 end
 
 function LookupTable:accUpdateOnly()
@@ -47,7 +47,7 @@ function LookupTable:makeInputContiguous(input)
 end
 
 function LookupTable:updateOutput(input)
-   self:backCompatibility()
+  self:backCompatibility()
    input = self:makeInputContiguous(input)
   if input:dim() == 1 then
     self.output:index(self.weight, 1, input)
@@ -61,7 +61,7 @@ function LookupTable:updateOutput(input)
 end
 
 function LookupTable:accGradParameters(input, gradOutput, scale)
-   self:backCompatibility()
+  self:backCompatibility()
    input = self.copiedInput and self._input or input
    if input:dim() == 2 then
       input = input:view(-1)
@@ -78,8 +78,8 @@ function LookupTable:type(type, tensorCache)
       -- CUDA uses _sorted and _indices temporary tensors
       self._sorted = self.weight.new()
       self._indices = self.weight.new()
-      self._count = self.weight.new()
-      self._input = self.weight.new()
+    self._count = self.weight.new()
+    self._input = self.weight.new()
    else
       -- self._count and self._input should only be converted if using Cuda
       self._count = torch.IntTensor()
