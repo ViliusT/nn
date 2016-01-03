@@ -21,26 +21,26 @@ function Container:size()
 end
 
 function Container:applyToModules(func)
-    for _, module in ipairs(self.modules) do
-        func(module)
+  for _, module in ipairs(self.modules) do
+    func(module)
     end
 end
 
 function Container:zeroGradParameters()
-    self:applyToModules(function(module) module:zeroGradParameters() end)
+  self:applyToModules(function(module) module:zeroGradParameters() end)
 end
 
 function Container:updateParameters(learningRate)
-    self:applyToModules(function(module) module:updateParameters(learningRate) end)
+  self:applyToModules(function(module) module:updateParameters(learningRate) end)
 end
 
 function Container:training()
-    self:applyToModules(function(module) module:training() end)
+  self:applyToModules(function(module) module:training() end)
   parent.training(self)
 end
 
 function Container:evaluate()
-    self:applyToModules(function(module) module:evaluate() end)
+  self:applyToModules(function(module) module:evaluate() end)
   parent.evaluate(self)
 end
 
@@ -51,7 +51,7 @@ function Container:share(mlp, ...)
 end
 
 function Container:reset(stdv)
-    self:applyToModules(function(module) module:reset(stdv) end)
+  self:applyToModules(function(module) module:reset(stdv) end)
 end
 
 function Container:parameters()
