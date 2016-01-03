@@ -20,7 +20,7 @@ function Normalize:updateOutput(input)
   self.buffer = self.buffer or input.new()
   
   self._output:resizeAs(input)
-
+  
   if self.p == math.huge then
     -- specialization for the infinity norm
     self._indices = self._indices or

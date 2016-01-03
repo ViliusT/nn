@@ -6,7 +6,7 @@ function Mean:__init(dimension, nInputDims)
   self.dimension = dimension
   -- do not assign default value to nInputDims or it will break backward compatibility
   self.nInputDims = nInputDims
-   self._gradInput = torch.Tensor()
+  self._gradInput = torch.Tensor()
 end
 
 function Mean:_getPositiveDimension(input)
@@ -30,12 +30,12 @@ end
 
 function Mean:updateGradInput(input, gradOutput)
   local dimension = self:_getPositiveDimension(input)
-   self._gradInput:resizeAs(gradOutput):copy(gradOutput)
+  self._gradInput:resizeAs(gradOutput):copy(gradOutput)
   self._gradInput:mul(1/input:size(dimension))
   
   if input:nDimension() > 1 then
     self._gradInput = nn.utils.addSingletonDimension(self._gradInput, dimension)
   end
-   self.gradInput = self._gradInput:expandAs(input)
+  self.gradInput = self._gradInput:expandAs(input)
   return self.gradInput
 end
