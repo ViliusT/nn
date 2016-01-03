@@ -15,7 +15,7 @@ end
 
 function Sequential:insert(module, index)
   index = index or (#self.modules + 1)
-   if index > (#self.modules + 1) or index < 1 then
+  if index > (#self.modules + 1) or index < 1 then
     error"index should be contiguous to existing modules"
   end
   table.insert(self.modules, index, module)
@@ -24,11 +24,11 @@ function Sequential:insert(module, index)
 end
 
 function Sequential:remove(index)
-   index = index or #self.modules
-   if index > #self.modules or index < 1 then
-      error"index out of range"
-   end
-   table.remove(self.modules, index)
+  index = index or #self.modules
+  if index > #self.modules or index < 1 then
+    error"index out of range"
+  end
+  table.remove(self.modules, index)
    if #self.modules > 0 then
        self.output = self.modules[#self.modules].output
        self.gradInput = self.modules[1].gradInput
