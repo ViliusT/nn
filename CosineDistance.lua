@@ -1,9 +1,9 @@
 local CosineDistance, parent = torch.class('nn.CosineDistance', 'nn.Module')
 
 function CosineDistance:__init()
-   parent.__init(self)
-   self.gradInput = {torch.Tensor(), torch.Tensor()}
-end 
+  parent.__init(self)
+  self.gradInput = {torch.Tensor(), torch.Tensor()}
+end
 
 local function makeContiguous(self, input1, input2)
   if not input1:isContiguous() then
@@ -20,7 +20,7 @@ local function makeContiguous(self, input1, input2)
 end
 
 function CosineDistance:updateOutput(input)
-   local input1, input2 = input[1], input[2]
+  local input1, input2 = input[1], input[2]
   
   input1, input2 = makeContiguous(self, input1, input2)
   
@@ -57,12 +57,12 @@ function CosineDistance:updateOutput(input)
   self.output:cmul(self.w1,self.w)
   self.output:resize(input1:size(1))
   
-   return self.output
+  return self.output
 end
 
 function CosineDistance:updateGradInput(input, gradOutput)
-   local v1  = input[1]
-   local v2  = input[2]
+  local v1  = input[1]
+  local v2  = input[2]
   local not_batch = false
   
   v1, v2 = makeContiguous(self, v1, v2)
@@ -94,6 +94,6 @@ function CosineDistance:updateGradInput(input, gradOutput)
     self.gradInput[1]:resize(gw1:size(2))
     self.gradInput[2]:resize(gw2:size(2))
   end
-
-   return self.gradInput
+  
+  return self.gradInput
 end

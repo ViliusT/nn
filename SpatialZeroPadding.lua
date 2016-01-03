@@ -1,11 +1,11 @@
 local SpatialZeroPadding, parent = torch.class('nn.SpatialZeroPadding', 'nn.Module')
 
 function SpatialZeroPadding:__init(pad_l, pad_r, pad_t, pad_b)
-   parent.__init(self)
-   self.pad_l = pad_l
-   self.pad_r = pad_r or self.pad_l
-   self.pad_t = pad_t or self.pad_l
-   self.pad_b = pad_b or self.pad_l
+  parent.__init(self)
+  self.pad_l = pad_l
+  self.pad_r = pad_r or self.pad_l
+  self.pad_t = pad_t or self.pad_l
+  self.pad_b = pad_b or self.pad_l
 end
 
 function SpatialZeroPadding:updateOutput(input)
@@ -54,7 +54,7 @@ function SpatialZeroPadding:updateOutput(input)
   else
     error('input must be 3 or 4-dimensional')
   end
-   return self.output
+  return self.output
 end
 
 function SpatialZeroPadding:updateGradInput(input, gradOutput)
@@ -93,7 +93,7 @@ function SpatialZeroPadding:updateGradInput(input, gradOutput)
   else
     error('input must be 3 or 4-dimensional')
   end
-   return self.gradInput
+  return self.gradInput
 end
 
 

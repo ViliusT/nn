@@ -1,9 +1,9 @@
 local Sum, parent = torch.class('nn.Sum', 'nn.Module')
 
 function Sum:__init(dimension, nInputDims)
-   parent.__init(self)
-   dimension = dimension or 1
-   self.dimension = dimension
+  parent.__init(self)
+  dimension = dimension or 1
+  self.dimension = dimension
   -- do not assign default value to nInputDims or it will break backward compatibility
   self.nInputDims = nInputDims
 end
@@ -24,10 +24,10 @@ function Sum:updateOutput(input)
       self.output = input.new()
    end
   self.output:sum(input, dimension)
-   if self.output:nDimension() > 1 then
+  if self.output:nDimension() > 1 then
     self.output = self.output:select(dimension, 1)
-   end
-   return self.output
+  end
+  return self.output
 end
 
 function Sum:updateGradInput(input, gradOutput)
@@ -40,6 +40,6 @@ function Sum:updateGradInput(input, gradOutput)
   gradOutput = gradOutput:view(size)
   self.gradInput:resizeAs(input)
   self.gradInput:copy(gradOutput:expandAs(input))
-
+  
   return self.gradInput
 end

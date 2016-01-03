@@ -1,9 +1,9 @@
 local Min, parent = torch.class('nn.Min', 'nn.Module')
 
 function Min:__init(dimension, nInputDims)
-   parent.__init(self)
-   dimension = dimension or 1
-   self.dimension = dimension
+  parent.__init(self)
+  dimension = dimension or 1
+  self.dimension = dimension
   -- do not assign default value to nInputDims or it will break backward compatibility
   self.nInputDims = nInputDims
 end

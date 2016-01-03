@@ -1,7 +1,7 @@
 local MarginCriterion, parent = torch.class('nn.MarginCriterion', 'nn.Criterion')
 
 function MarginCriterion:__init(margin)
-   parent.__init(self)
+  parent.__init(self)
   self.sizeAverage = true
   self.margin = margin or 1
 end

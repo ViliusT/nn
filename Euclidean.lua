@@ -1,26 +1,26 @@
 local Euclidean, parent = torch.class('nn.Euclidean', 'nn.Module')
 
 function Euclidean:__init(inputSize,outputSize)
-   parent.__init(self)
-
-   self.weight = torch.Tensor(inputSize,outputSize)
-   self.gradWeight = torch.Tensor(inputSize,outputSize)
-
-   -- state
-   self.gradInput:resize(inputSize)
-   self.output:resize(outputSize)
+  parent.__init(self)
+  
+  self.weight = torch.Tensor(inputSize,outputSize)
+  self.gradWeight = torch.Tensor(inputSize,outputSize)
+  
+  -- state
+  self.gradInput:resize(inputSize)
+  self.output:resize(outputSize)
   
   self.fastBackward = true
-
-   self:reset()
+  
+  self:reset()
 end
 
 function Euclidean:reset(stdv)
-   if stdv then
-      stdv = stdv * math.sqrt(3)
-   else
-      stdv = 1./math.sqrt(self.weight:size(1))
-   end
+  if stdv then
+    stdv = stdv * math.sqrt(3)
+  else
+    stdv = 1./math.sqrt(self.weight:size(1))
+  end
   if nn.oldSeed then
     for i=1,self.weight:size(2) do
       self.weight:select(2, i):apply(function()
@@ -29,7 +29,7 @@ function Euclidean:reset(stdv)
   end
 else
   self.weight:uniform(-stdv, stdv)
-   end
+end
 end
 
 local function view(res, src, ...)
@@ -83,9 +83,9 @@ elseif input:dim() == 2 then
   self.output:resize(batchSize, outputSize)
 else
   error"1D or 2D input expected"
-   end
+end
 
-   return self.output
+return self.output
 end
 
 function Euclidean:updateGradInput(input, gradOutput)
@@ -138,20 +138,20 @@ elseif input:dim() == 2 then
     self._repeat2:cmul(self._repeat)
   else
     self._repeat2:cmul(self._repeat, self._expand3)
-      end
+  end
   
   self.gradInput:sum(self._repeat2, 3)
   self.gradInput:resizeAs(input)
 else
   error"1D or 2D input expected"
-   end
+end
 
 return self.gradInput
 end
 
 function Euclidean:accGradParameters(input, gradOutput, scale)
 local inputSize, outputSize = self.weight:size(1), self.weight:size(2)
-   scale = scale or 1
+scale = scale or 1
 
 --[[
 dy_j    2 * (w_j - x)     w_j - x
@@ -185,6 +185,6 @@ if type then
   self._expand3 = nil
   self._repeat = nil
   self._repeat2 = nil
-   end
+end
    return parent.type(self, type, tensorCache)
 end

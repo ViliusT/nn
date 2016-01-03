@@ -2,23 +2,23 @@ local View, parent = torch.class('nn.View', 'nn.Module')
 
 function View:__init(...)
   parent.__init(self)
-   if select('#', ...) == 1 and torch.typename(select(1, ...)) == 'torch.LongStorage' then
-      self.size = select(1, ...)
-   else
+  if select('#', ...) == 1 and torch.typename(select(1, ...)) == 'torch.LongStorage' then
+    self.size = select(1, ...)
+  else
     self.size = torch.LongStorage({...})
   end
-
+  
   self.numElements = 1
-   local inferdim = false
+  local inferdim = false
   for i = 1,#self.size do
-      local szi = self.size[i]
-      if szi >= 0 then
-         self.numElements = self.numElements * self.size[i]
-      else
-         assert(szi == -1, 'size should be positive or -1')
-         assert(not inferdim, 'only one dimension can be at -1')
-         inferdim = true
-      end
+    local szi = self.size[i]
+    if szi >= 0 then
+      self.numElements = self.numElements * self.size[i]
+    else
+      assert(szi == -1, 'size should be positive or -1')
+      assert(not inferdim, 'only one dimension can be at -1')
+      inferdim = true
+    end
   end
   
   self.output = nil
@@ -32,48 +32,48 @@ function View:setNumInputDims(numInputDims)
 end
 
 local function batchsize(input, size, numInputDims, numElements)
-   local ind = input:nDimension()
-   local isz = input:size()
-   local maxdim = numInputDims and numInputDims or ind
-   local ine = 1
-   for i=ind,ind-maxdim+1,-1 do
-      ine = ine * isz[i]
-   end
-
-   if ine % numElements ~= 0 then
-      error(string.format(
-               'input view (%s) and desired view (%s) do not match',
-               table.concat(input:size():totable(), 'x'),
-               table.concat(size:totable(), 'x')))
-   end
-
-   -- the remainder is either the batch...
-   local bsz = ine / numElements
-
-   -- ... or the missing size dim
-   for i=1,size:size() do
-      if size[i] == -1 then
-         bsz = 1
-         break
-      end
-   end
-
-   -- for dim over maxdim, it is definitively the batch
-   for i=ind-maxdim,1,-1 do
-      bsz = bsz * isz[i]
-   end
-
-   -- special card
-   if bsz == 1 and (not numInputDims or input:nDimension() <= numInputDims) then
-      return
-   end
-
-   return bsz
+  local ind = input:nDimension()
+  local isz = input:size()
+  local maxdim = numInputDims and numInputDims or ind
+  local ine = 1
+  for i=ind,ind-maxdim+1,-1 do
+    ine = ine * isz[i]
+  end
+  
+  if ine % numElements ~= 0 then
+    error(string.format(
+        'input view (%s) and desired view (%s) do not match',
+        table.concat(input:size():totable(), 'x'),
+        table.concat(size:totable(), 'x')))
+  end
+  
+  -- the remainder is either the batch...
+  local bsz = ine / numElements
+  
+  -- ... or the missing size dim
+  for i=1,size:size() do
+    if size[i] == -1 then
+      bsz = 1
+      break
+    end
+  end
+  
+  -- for dim over maxdim, it is definitively the batch
+  for i=ind-maxdim,1,-1 do
+    bsz = bsz * isz[i]
+  end
+  
+  -- special card
+  if bsz == 1 and (not numInputDims or input:nDimension() <= numInputDims) then
+    return
+  end
+  
+  return bsz
 end
 
 function View:updateOutput(input)
-   local bsz = batchsize(input, self.size, self.numInputDims, self.numElements)
-   if bsz then
+  local bsz = batchsize(input, self.size, self.numInputDims, self.numElements)
+  if bsz then
       self.output = input:view(bsz, table.unpack(self.size:totable()))
   else
     self.output = input:view(self.size)

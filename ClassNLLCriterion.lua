@@ -64,7 +64,7 @@ function ClassNLLCriterion:updateGradInput(input, target)
     else
         self.target = target:long()
     end
-
+  
     self.gradInput:resizeAs(input):zero()
     input.nn.ClassNLLCriterion_updateGradInput(
         input,

@@ -1,10 +1,10 @@
 local DotProduct, parent = torch.class('nn.DotProduct', 'nn.Module')
 
 function DotProduct:__init()
-   parent.__init(self)
-   self.gradInput = {torch.Tensor(), torch.Tensor()}
-end 
- 
+  parent.__init(self)
+  self.gradInput = {torch.Tensor(), torch.Tensor()}
+end
+
 function DotProduct:updateOutput(input)
   local input1, input2 = input[1], input[2]
   if input1:dim() == 1 then
@@ -18,14 +18,14 @@ function DotProduct:updateOutput(input)
   self.buffer:cmul(input1, input2)
   self.output:sum(self.buffer, 2)
   self.output:resize(input1:size(1))
-   return self.output
+  return self.output
 end
 
 function DotProduct:updateGradInput(input, gradOutput)
-   local v1 = input[1]
-   local v2 = input[2]
+  local v1 = input[1]
+  local v2 = input[2]
   local not_batch = false
-
+  
   if v1:dim() == 1 then
     v1 = v1:view(1,-1)
     v2 = v2:view(1,-1)
@@ -46,6 +46,6 @@ function DotProduct:updateGradInput(input, gradOutput)
     self.gradInput[1] = gw1:select(1,1)
     self.gradInput[2] = gw2:select(1,1)
   end
-
-   return self.gradInput
+  
+  return self.gradInput
 end

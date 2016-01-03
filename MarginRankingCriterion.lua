@@ -1,12 +1,12 @@
 local MarginRankingCriterion, parent = torch.class('nn.MarginRankingCriterion', 'nn.Criterion')
 
 function MarginRankingCriterion:__init(margin)
-   parent.__init(self)
-   margin=margin or 1
-   self.margin = margin 
-   self.gradInput = {torch.Tensor(1), torch.Tensor(1)}
-end 
- 
+  parent.__init(self)
+  margin=margin or 1
+  self.margin = margin
+  self.gradInput = {torch.Tensor(1), torch.Tensor(1)}
+end
+
 function MarginRankingCriterion:updateOutput(input,y)
    if input[1]:size(1) == 1 then
       self.output=math.max(0, -y*(input[1][1]-input[2][1]) + self.margin  ) 
@@ -30,7 +30,7 @@ function MarginRankingCriterion:updateOutput(input,y)
     self.output:cmul(self.mask)
   end
   
-   return self.output
+  return self.output
 end
 
 function MarginRankingCriterion:updateGradInput(input, y)

@@ -1,7 +1,7 @@
 local CMul, parent = torch.class('nn.CMul', 'nn.Module')
 
 function CMul:__init(...)
-   parent.__init(self)
+  parent.__init(self)
   
   local arg = {...}
   
@@ -18,12 +18,12 @@ function CMul:__init(...)
   
   self.weight = torch.Tensor(self.size)
   self.gradWeight = torch.Tensor(self.size)
-   
+  
   self.output:resize(self.size)
-
-   self:reset()
+  
+  self:reset()
 end
- 
+
 function CMul:reset(stdv)
   if stdv then
     stdv = stdv * math.sqrt(3)
@@ -61,7 +61,7 @@ function CMul:updateOutput(input)
     end
   end
   
-   return self.output
+  return self.output
 end
 
 function CMul:updateGradInput(input, gradOutput)
@@ -88,7 +88,7 @@ function CMul:updateGradInput(input, gradOutput)
     else
       self._gradInput:addcmul(1, self._expand, self._gradOutput)
     end
-   end
+  end
   
   return self.gradInput
 end

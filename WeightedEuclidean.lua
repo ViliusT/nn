@@ -1,24 +1,24 @@
 local WeightedEuclidean, parent = torch.class('nn.WeightedEuclidean', 'nn.Module')
 
 function WeightedEuclidean:__init(inputSize,outputSize)
-   parent.__init(self)
-
+  parent.__init(self)
+  
   self.weight = torch.Tensor(inputSize,outputSize)
   self.gradWeight = torch.Tensor(inputSize,outputSize)
-
+  
   -- each template (output dim) has its own diagonal covariance matrix
-   self.diagCov = torch.Tensor(inputSize,outputSize)
-   self.gradDiagCov = torch.Tensor(inputSize,outputSize)
-
-   self:reset()
+  self.diagCov = torch.Tensor(inputSize,outputSize)
+  self.gradDiagCov = torch.Tensor(inputSize,outputSize)
+  
+  self:reset()
 end
 
 function WeightedEuclidean:reset(stdv)
-   if stdv then
-      stdv = stdv * math.sqrt(3)
-   else
+  if stdv then
+    stdv = stdv * math.sqrt(3)
+  else
     stdv = 1./math.sqrt(self.weight:size(1))
-   end
+  end
   self.weight:uniform(-stdv, stdv)
   self.diagCov:fill(1)
 end
@@ -29,7 +29,7 @@ local function view(res, src, ...)
       res:view(src, table.unpack(args))
   else
       res:reshape(src, table.unpack(args))
-   end
+  end
 end
 
 function WeightedEuclidean:updateOutput(input)
@@ -84,8 +84,8 @@ function WeightedEuclidean:updateOutput(input)
     self.output:resize(batchSize, outputSize)
   else
     error"1D or 2D input expected"
-   end
-   return self.output
+  end
+  return self.output
 end
 
 function WeightedEuclidean:updateGradInput(input, gradOutput)
@@ -147,14 +147,14 @@ function WeightedEuclidean:updateGradInput(input, gradOutput)
     self.gradInput:resizeAs(input)
   else
     error"1D or 2D input expected"
-   end
+  end
   
-   return self.gradInput
+  return self.gradInput
 end
 
 function WeightedEuclidean:accGradParameters(input, gradOutput, scale)
   local inputSize, outputSize = self.weight:size(1), self.weight:size(2)
-   scale = scale or 1
+  scale = scale or 1
   
   --[[
   dy_j   2 * c_j * c_j * (w_j - x)    c_j * c_j * (w_j - x)
@@ -178,7 +178,7 @@ function WeightedEuclidean:accGradParameters(input, gradOutput, scale)
       self._repeat2:cmul(self._repeat)
     else
       self._repeat2:cmul(self._repeat, self._expand4)
-      end
+    end
     
     self.gradDiagCov:add(self._repeat2)
   elseif input:dim() == 2 then
@@ -206,7 +206,7 @@ function WeightedEuclidean:accGradParameters(input, gradOutput, scale)
     self.gradDiagCov:add(scale, self._sum)
   else
     error"1D or 2D input expected"
-   end
+  end
 end
 
 function WeightedEuclidean:type(type, tensorCache)

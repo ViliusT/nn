@@ -1,18 +1,18 @@
 local HingeEmbeddingCriterion, parent = torch.class('nn.HingeEmbeddingCriterion', 'nn.Criterion')
 
 function HingeEmbeddingCriterion:__init(margin)
-   parent.__init(self)
+  parent.__init(self)
   self.margin = margin or 1
   self.sizeAverage = true
-end 
- 
+end
+
 function HingeEmbeddingCriterion:updateOutput(input,y)
   self.buffer = self.buffer or input.new()
   if not torch.isTensor(y) then
     self.ty = self.ty or input.new():resize(1)
     self.ty[1]=y
     y=self.ty
-   end
+  end
   
   self.buffer:resizeAs(input):copy(input)
   self.buffer[torch.eq(y, -1)] = 0
@@ -27,7 +27,7 @@ function HingeEmbeddingCriterion:updateOutput(input,y)
     self.output = self.output / input:nElement()
   end
   
-   return self.output
+  return self.output
 end
 
 function HingeEmbeddingCriterion:updateGradInput(input, y)

@@ -1,14 +1,14 @@
 local PairwiseDistance, parent = torch.class('nn.PairwiseDistance', 'nn.Module')
 
 function PairwiseDistance:__init(p)
-   parent.__init(self)
-
-   -- state
+  parent.__init(self)
+  
+  -- state
   self.gradInput = {}
   self.diff = torch.Tensor()
   self.norm = p
-end 
-  
+end
+
 function PairwiseDistance:updateOutput(input)
   if input[1]:dim() == 1 then
     self.output:resize(1)
@@ -29,12 +29,12 @@ function PairwiseDistance:updateOutput(input)
     error('input must be vector or matrix')
   end
   
-   return self.output
+  return self.output
 end
 
-local function mathsign(x) 
-   if x==0 then return  2*torch.random(2)-3; end
-   if x>0 then return 1; else return -1; end
+local function mathsign(x)
+if x==0 then return  2*torch.random(2)-3; end
+if x>0 then return 1; else return -1; end
 end
 
 function PairwiseDistance:updateGradInput(input, gradOutput)
@@ -48,7 +48,7 @@ function PairwiseDistance:updateGradInput(input, gradOutput)
   self.gradInput[1]:add(-1, input[2])
   
   if self.norm==1 then
-     self.gradInput[1]:apply(mathsign)
+    self.gradInput[1]:apply(mathsign)
   else
     -- Note: derivative of p-norm:
     -- d/dx_k(||x||_p) = (x_k * abs(x_k)^(p-2)) / (||x||_p)^(p-1)

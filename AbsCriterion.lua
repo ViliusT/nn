@@ -1,7 +1,7 @@
 local AbsCriterion, parent = torch.class('nn.AbsCriterion', 'nn.Criterion')
 
 function AbsCriterion:__init(sizeAverage)
-   parent.__init(self)
+  parent.__init(self)
   if sizeAverage ~= nil then
     self.sizeAverage = sizeAverage
   else

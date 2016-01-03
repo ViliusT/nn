@@ -1,31 +1,31 @@
 local Reshape, parent = torch.class('nn.Reshape', 'nn.Module')
 
 function Reshape:__init(...)
-   parent.__init(self)
-   local arg = {...}
-
-   self.size = torch.LongStorage()
-   self.batchsize = torch.LongStorage()
+  parent.__init(self)
+  local arg = {...}
+  
+  self.size = torch.LongStorage()
+  self.batchsize = torch.LongStorage()
   if torch.type(arg[#arg]) == 'boolean' then
     self.batchMode = arg[#arg]
     table.remove(arg, #arg)
   end
-   local n = #arg
-   if n == 1 and torch.typename(arg[1]) == 'torch.LongStorage' then
-      self.size:resize(#arg[1]):copy(arg[1])
-   else
-      self.size:resize(n)
-      for i=1,n do
-         self.size[i] = arg[i]
-      end
-   end
+  local n = #arg
+  if n == 1 and torch.typename(arg[1]) == 'torch.LongStorage' then
+    self.size:resize(#arg[1]):copy(arg[1])
+  else
+    self.size:resize(n)
+    for i=1,n do
+      self.size[i] = arg[i]
+    end
+  end
   
   self.nelement = 1
-   self.batchsize:resize(#self.size+1)
-   for i=1,#self.size do
+  self.batchsize:resize(#self.size+1)
+  for i=1,#self.size do
     self.nelement = self.nelement * self.size[i]
-      self.batchsize[i+1] = self.size[i]
-   end
+    self.batchsize[i+1] = self.size[i]
+  end
   
   -- only used for non-contiguous input or gradOutput
   self._input = torch.Tensor()
@@ -44,11 +44,11 @@ function Reshape:updateOutput(input)
       (input:nElement() == self.nelement and input:size(1) ~= 1)
     ) then
     self.output:view(input, self.size)
-   else
-      self.batchsize[1] = input:size(1)
+  else
+    self.batchsize[1] = input:size(1)
     self.output:view(input, self.batchsize)
-   end
-   return self.output
+  end
+  return self.output
 end
 
 function Reshape:updateGradInput(input, gradOutput)
@@ -59,7 +59,7 @@ function Reshape:updateGradInput(input, gradOutput)
   end
   
   self.gradInput:viewAs(gradOutput, input)
-   return self.gradInput
+  return self.gradInput
 end
 
 

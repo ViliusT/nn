@@ -1,16 +1,16 @@
 local CosineEmbeddingCriterion, parent = torch.class('nn.CosineEmbeddingCriterion', 'nn.Criterion')
 
 function CosineEmbeddingCriterion:__init(margin)
-   parent.__init(self)
+  parent.__init(self)
   margin = margin or 0
-   self.margin = margin 
-   self.gradInput = {torch.Tensor(), torch.Tensor()}
+  self.margin = margin
+  self.gradInput = {torch.Tensor(), torch.Tensor()}
   self.sizeAverage = true
-end 
+end
 
 function CosineEmbeddingCriterion:updateOutput(input,y)
   
-   local input1, input2 = input[1], input[2]
+  local input1, input2 = input[1], input[2]
   
   -- keep backward compatibility
   if type(y) == 'number' then
@@ -68,15 +68,15 @@ function CosineEmbeddingCriterion:updateOutput(input,y)
   
   if self.sizeAverage then
     self.output = self.output/y:size(1)
-   end
+  end
   
-   return self.output
+  return self.output
 end
 
 function CosineEmbeddingCriterion:updateGradInput(input, y)
   
-   local v1  = input[1]
-   local v2  = input[2]
+  local v1  = input[1]
+  local v2  = input[2]
   local not_batch = false
   
   -- keep backward compatibility
@@ -100,11 +100,11 @@ function CosineEmbeddingCriterion:updateGradInput(input, y)
   self.buffer:cmul(self.w1,self.w22)
   gw1:addcmul(-1,self.buffer:expandAs(v1),v1)
   gw1:cmul(self.w:expandAs(v1))
-
+  
   self.buffer:cmul(self.w1,self.w32)
   gw2:addcmul(-1,self.buffer:expandAs(v1),v2)
   gw2:cmul(self.w:expandAs(v1))
-
+  
   -- self._idx = self._outputs <= 0
   y.le(self._idx,self._outputs,0)
   self._idx = self._idx:view(-1,1):expand(gw1:size())
@@ -124,9 +124,9 @@ function CosineEmbeddingCriterion:updateGradInput(input, y)
   if not_batch then
     self.gradInput[1]:resize(gw1:size(2))
     self.gradInput[2]:resize(gw2:size(2))
-   end
+  end
   
-   return self.gradInput
+  return self.gradInput
 end
 
 function CosineEmbeddingCriterion:type(type)

@@ -1,12 +1,12 @@
 local Threshold, parent = torch.class('nn.Threshold','nn.Module')
 
 function Threshold:__init(th,v,ip)
-   parent.__init(self)
-   self.threshold = th or 1e-6
-   self.val = v or 0
-   if (th and type(th) ~= 'number') or (v and type(v) ~= 'number') then
-      error('nn.Threshold(threshold, value)')
-   end
+  parent.__init(self)
+  self.threshold = th or 1e-6
+  self.val = v or 0
+  if (th and type(th) ~= 'number') or (v and type(v) ~= 'number') then
+    error('nn.Threshold(threshold, value)')
+  end
   -- default for inplace is false
   self.inplace = ip or false
   if (ip and type(ip) ~= 'boolean') then
@@ -17,14 +17,14 @@ end
 
 function Threshold:updateOutput(input)
   self:validateParameters()
-   input.nn.Threshold_updateOutput(self, input)
-   return self.output
+  input.nn.Threshold_updateOutput(self, input)
+  return self.output
 end
 
 function Threshold:updateGradInput(input, gradOutput)
   self:validateParameters()
-   input.nn.Threshold_updateGradInput(self, input, gradOutput)
-   return self.gradInput
+  input.nn.Threshold_updateGradInput(self, input, gradOutput)
+  return self.gradInput
 end
 
 function Threshold:validateParameters()

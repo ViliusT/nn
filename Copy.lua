@@ -5,33 +5,33 @@ function Copy:__init(intype, outtype, forceCopy, dontCast)
   outtype = outtype or torch.Tensor.__typename
 
   self.dontCast = dontCast
-
-   parent.__init(self)
-   self.gradInput = torch.getmetatable(intype).new()
-   self.output = torch.getmetatable(outtype).new()
-
+  
+  parent.__init(self)
+  self.gradInput = torch.getmetatable(intype).new()
+  self.output = torch.getmetatable(outtype).new()
+  
   if (not forceCopy) and intype == outtype then
-
-      self.updateOutput = function(self, input)
-                        self.output = input
-                        return input
-                     end
-
-      self.updateGradInput = function(self, input, gradOutput)
-                         self.gradInput = gradOutput
-                         return gradOutput
-                      end
-   end
+    
+    self.updateOutput = function(self, input)
+      self.output = input
+      return input
+    end
+    
+    self.updateGradInput = function(self, input, gradOutput)
+      self.gradInput = gradOutput
+      return gradOutput
+    end
+  end
 end
 
 function Copy:updateOutput(input)
-   self.output:resize(input:size()):copy(input)
-   return self.output
+  self.output:resize(input:size()):copy(input)
+  return self.output
 end
 
 function Copy:updateGradInput(input, gradOutput)
-   self.gradInput:resize(gradOutput:size()):copy(gradOutput)
-   return self.gradInput
+  self.gradInput:resize(gradOutput:size()):copy(gradOutput)
+  return self.gradInput
 end
 
 function Copy:type(type, tensorCache)

@@ -1,35 +1,35 @@
 local MultiCriterion, parent = torch.class('nn.MultiCriterion', 'nn.Criterion')
 
 function MultiCriterion:__init()
-   parent.__init(self)
-   self.criterions = {}
-   self.weights = torch.DoubleStorage()
+  parent.__init(self)
+  self.criterions = {}
+  self.weights = torch.DoubleStorage()
 end
 
 function MultiCriterion:add(criterion, weight)
   assert(criterion, 'no criterion provided')
-   weight = weight or 1
-   table.insert(self.criterions, criterion)
-   self.weights:resize(#self.criterions, true)
-   self.weights[#self.criterions] = weight
-   return self
+  weight = weight or 1
+  table.insert(self.criterions, criterion)
+  self.weights:resize(#self.criterions, true)
+  self.weights[#self.criterions] = weight
+  return self
 end
 
 function MultiCriterion:updateOutput(input, target)
-   self.output = 0
-   for i=1,#self.criterions do
-      self.output = self.output + self.weights[i]*self.criterions[i]:updateOutput(input, target)
-   end
-   return self.output
+  self.output = 0
+  for i=1,#self.criterions do
+    self.output = self.output + self.weights[i]*self.criterions[i]:updateOutput(input, target)
+  end
+  return self.output
 end
 
 function MultiCriterion:updateGradInput(input, target)
   self.gradInput = nn.utils.recursiveResizeAs(self.gradInput, input)
   nn.utils.recursiveFill(self.gradInput, 0)
-   for i=1,#self.criterions do
+  for i=1,#self.criterions do
     nn.utils.recursiveAdd(self.gradInput, self.weights[i], self.criterions[i]:updateGradInput(input, target))
-   end
-   return self.gradInput
+  end
+  return self.gradInput
 end
 
 function MultiCriterion:type(type)

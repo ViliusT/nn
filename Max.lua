@@ -1,9 +1,9 @@
 local Max, parent = torch.class('nn.Max', 'nn.Module')
 
 function Max:__init(dimension, nInputDims)
-   parent.__init(self)
-   dimension = dimension or 1
-   self.dimension = dimension
+  parent.__init(self)
+  dimension = dimension or 1
+  self.dimension = dimension
   -- do not assign default value to nInputDims or it will break backward compatibility
   self.nInputDims = nInputDims
 end

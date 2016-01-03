@@ -1,7 +1,7 @@
 local Abs, parent = torch.class('nn.Abs', 'nn.Module')
 
 function Abs:__init()
-   parent.__init(self)
+  parent.__init(self)
 end
 
 function Abs:updateOutput(input)
@@ -9,7 +9,7 @@ function Abs:updateOutput(input)
      input:cdata(),
      self.output:cdata()
    )
-   return self.output
+  return self.output
 end
 
 function Abs:updateGradInput(input, gradOutput)
@@ -18,5 +18,5 @@ function Abs:updateGradInput(input, gradOutput)
      gradOutput:cdata(),
      self.gradInput:cdata()
    )
-   return self.gradInput
+  return self.gradInput
 end

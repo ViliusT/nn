@@ -1,8 +1,8 @@
 local SplitTable, parent = torch.class('nn.SplitTable', 'nn.Module')
 
 function SplitTable:__init(dimension, nInputDims)
-   parent.__init(self)
-   self.dimension = dimension
+  parent.__init(self)
+  self.dimension = dimension
   self.nInputDims = nInputDims
 end
 
@@ -21,21 +21,21 @@ function SplitTable:updateOutput(input)
   local slices = input:size(dimension)
   
   local currentOutput= {}
-   for i=1,slices do
+  for i=1,slices do
     currentOutput[#currentOutput+1] = input:select(dimension,i)
-   end
-   self.output = currentOutput
-   return self.output
-end 
+  end
+  self.output = currentOutput
+  return self.output
+end
 
 function SplitTable:updateGradInput(input, gradOutput)
   local dimension = self:_getPositiveDimension(input)
   local slices = input:size(dimension)
-   self.gradInput:resizeAs(input)
-
-   for i=1,slices do 
-      local currentGradInput = gradOutput[i];        
+  self.gradInput:resizeAs(input)
+  
+  for i=1,slices do
+    local currentGradInput = gradOutput[i];
     self.gradInput:select(dimension,i):copy(currentGradInput)
-   end
-   return self.gradInput
+  end
+  return self.gradInput
 end

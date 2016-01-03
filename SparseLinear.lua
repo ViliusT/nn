@@ -1,9 +1,9 @@
 local SparseLinear, parent = torch.class('nn.SparseLinear', 'nn.Module')
 
 function SparseLinear:__init(inputSize, outputSize)
-   parent.__init(self)
-
-   self.weightDecay = 0
+  parent.__init(self)
+  
+  self.weightDecay = 0
   self.weight = torch.Tensor(outputSize, inputSize):zero()
   self.bias = torch.Tensor(outputSize):zero()
   self.gradWeight = torch.Tensor(outputSize, inputSize):zero()
@@ -14,19 +14,19 @@ function SparseLinear:__init(inputSize, outputSize)
     self.shardBuffer = torch.Tensor(outputSize, torch.getnumthreads())
   end
   
-   -- state
-   self.gradInput:resize(inputSize)
-   self.output:resize(outputSize)
-
-   self:reset()
+  -- state
+  self.gradInput:resize(inputSize)
+  self.output:resize(outputSize)
+  
+  self:reset()
 end
 
 function SparseLinear:reset(stdv)
-   if stdv then
-      stdv = stdv * math.sqrt(3)
-   else
+  if stdv then
+    stdv = stdv * math.sqrt(3)
+  else
     stdv = 1./math.sqrt(self.weight:size(2))
-   end
+  end
   if nn.oldSeed then
     for i=1,self.weight:size(1) do
       self.weight:select(1, i):apply(function()
@@ -37,11 +37,11 @@ function SparseLinear:reset(stdv)
 else
   self.weight:uniform(-stdv, stdv)
   self.bias:uniform(-stdv, stdv):mul(0.000001)
-   end
+end
 end
 
 function SparseLinear:updateOutput(input)
-   return input.nn.SparseLinear_updateOutput(self, input)
+return input.nn.SparseLinear_updateOutput(self, input)
 end
 
 function SparseLinear:accGradParameters(input, gradOutput, scale)
@@ -51,7 +51,7 @@ else
   self.lastInput:resizeAs(input):copy(input)
 end
 
-   return input.nn.SparseLinear_accGradParameters(self, input, gradOutput, scale)
+return input.nn.SparseLinear_accGradParameters(self, input, gradOutput, scale)
 end
 
 function SparseLinear:updateGradInput(input, gradOutput)

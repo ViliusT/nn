@@ -1,24 +1,24 @@
 local Module = torch.class('nn.Module')
 
 function Module:__init()
-   self.gradInput = torch.Tensor()
-   self.output = torch.Tensor()
+  self.gradInput = torch.Tensor()
+  self.output = torch.Tensor()
 end
 
 function Module:parameters()
-   if self.weight and self.bias then
-      return {self.weight, self.bias}, {self.gradWeight, self.gradBias}
-   elseif self.weight then
-      return {self.weight}, {self.gradWeight}
-   elseif self.bias then
-      return {self.bias}, {self.gradBias}
-   else
-      return
-   end
+  if self.weight and self.bias then
+    return {self.weight, self.bias}, {self.gradWeight, self.gradBias}
+  elseif self.weight then
+    return {self.weight}, {self.gradWeight}
+  elseif self.bias then
+    return {self.bias}, {self.gradBias}
+  else
+    return
+  end
 end
 
 function Module:updateOutput(input)
-   return self.output
+  return self.output
 end
 
 function Module:forward(input)
@@ -27,58 +27,58 @@ end
 
 function Module:backward(input, gradOutput, scale)
   scale = scale or 1
-   self:updateGradInput(input, gradOutput)
+  self:updateGradInput(input, gradOutput)
   self:accGradParameters(input, gradOutput, scale)
-   return self.gradInput
+  return self.gradInput
 end
 
 function Module:backwardUpdate(input, gradOutput, lr)
-   self:updateGradInput(input, gradOutput)
-   self:accUpdateGradParameters(input, gradOutput, lr)
-   return self.gradInput
+  self:updateGradInput(input, gradOutput)
+  self:accUpdateGradParameters(input, gradOutput, lr)
+  return self.gradInput
 end
 
 function Module:updateGradInput(input, gradOutput)
-   return self.gradInput
+  return self.gradInput
 end
 
 function Module:accGradParameters(input, gradOutput, scale)
 end
 
 function Module:accUpdateGradParameters(input, gradOutput, lr)
-   local gradWeight = self.gradWeight
-   local gradBias = self.gradBias
-   self.gradWeight = self.weight
-   self.gradBias = self.bias
-   self:accGradParameters(input, gradOutput, -lr)
-   self.gradWeight = gradWeight
-   self.gradBias = gradBias
+  local gradWeight = self.gradWeight
+  local gradBias = self.gradBias
+  self.gradWeight = self.weight
+  self.gradBias = self.bias
+  self:accGradParameters(input, gradOutput, -lr)
+  self.gradWeight = gradWeight
+  self.gradBias = gradBias
 end
 
 function Module:sharedAccUpdateGradParameters(input, gradOutput, lr)
-   if self:parameters() then
-      self:zeroGradParameters()
-      self:accGradParameters(input, gradOutput, 1)
-      self:updateParameters(lr)
-   end
+  if self:parameters() then
+    self:zeroGradParameters()
+    self:accGradParameters(input, gradOutput, 1)
+    self:updateParameters(lr)
+  end
 end
 
 function Module:zeroGradParameters()
-   local _,gradParams = self:parameters()
-   if gradParams then
-      for i=1,#gradParams do
-         gradParams[i]:zero()
-      end
-   end
+  local _,gradParams = self:parameters()
+  if gradParams then
+    for i=1,#gradParams do
+      gradParams[i]:zero()
+    end
+  end
 end
 
 function Module:updateParameters(learningRate)
-   local params, gradParams = self:parameters()
-   if params then
-      for i=1,#params do
-         params[i]:add(-learningRate, gradParams[i])
-      end
-   end
+  local params, gradParams = self:parameters()
+  if params then
+    for i=1,#params do
+      params[i]:add(-learningRate, gradParams[i])
+    end
+  end
 end
 
 function Module:training()
@@ -91,26 +91,26 @@ end
 
 function Module:share(mlp, ...)
   local arg = {...}
-   for i,v in ipairs(arg) do
-      if self[v] ~= nil then
-         self[v]:set(mlp[v])
-         self.accUpdateGradParameters = self.sharedAccUpdateGradParameters
-         mlp.accUpdateGradParameters = mlp.sharedAccUpdateGradParameters
-      end
-   end
+  for i,v in ipairs(arg) do
+    if self[v] ~= nil then
+      self[v]:set(mlp[v])
+      self.accUpdateGradParameters = self.sharedAccUpdateGradParameters
+      mlp.accUpdateGradParameters = mlp.sharedAccUpdateGradParameters
+    end
+  end
   return self
 end
 
 function Module:clone(...)
-   local f = torch.MemoryFile("rw"):binary()
-   f:writeObject(self)
-   f:seek(1)
-   local clone = f:readObject()
-   f:close()
-   if select('#',...) > 0 then
-      clone:share(self,...)
-   end
-   return clone
+  local f = torch.MemoryFile("rw"):binary()
+  f:writeObject(self)
+  f:seek(1)
+  local clone = f:readObject()
+  f:close()
+  if select('#',...) > 0 then
+    clone:share(self,...)
+  end
+  return clone
 end
 
 function Module:type(type, tensorCache)
@@ -118,24 +118,24 @@ function Module:type(type, tensorCache)
 
    tensorCache = tensorCache or {}
 
-   -- find all tensors and convert them
-   for key,param in pairs(self) do
+  -- find all tensors and convert them
+  for key,param in pairs(self) do
       self[key] = nn.utils.recursiveType(param, type, tensorCache)
-   end
+  end
 
-   return self
+  return self
 end
 
 function Module:float()
-   return self:type('torch.FloatTensor')
+  return self:type('torch.FloatTensor')
 end
 
 function Module:double()
-   return self:type('torch.DoubleTensor')
+  return self:type('torch.DoubleTensor')
 end
 
 function Module:cuda()
-   return self:type('torch.CudaTensor')
+  return self:type('torch.CudaTensor')
 end
 
 function Module:reset()
@@ -200,7 +200,7 @@ function Module.flatten(parameters)
       if not storages[storageKey] then
          storages[storageKey] = {storage, nParameters}
       nParameters = nParameters + storage:size()
-      end
+    end
 
       parameterMeta[k] = {storageOffset = param:storageOffset() +
                                           storages[storageKey][2],
@@ -249,7 +249,7 @@ function Module.flatten(parameters)
         parameterMeta[k].storageOffset =
               compactOffsets[parameterMeta[k].storageOffset]
     end
-   end
+  end
 
    if TmpTensor ~= Tensor then
       flatParameters = Tensor(flatParameters:nElement()):copy(flatParameters)

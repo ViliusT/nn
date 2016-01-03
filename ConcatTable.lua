@@ -1,16 +1,16 @@
 local ConcatTable, parent = torch.class('nn.ConcatTable', 'nn.Container')
 
 function ConcatTable:__init()
-   parent.__init(self)
-   self.modules = {}
-   self.output = {}
+  parent.__init(self)
+  self.modules = {}
+  self.output = {}
 end
 
 function ConcatTable:updateOutput(input)
-   for i=1,#self.modules do
-      self.output[i] = self.modules[i]:updateOutput(input)
-   end
-   return self.output
+  for i=1,#self.modules do
+    self.output[i] = self.modules[i]:updateOutput(input)
+  end
+  return self.output
 end
 
 local function retable(t1, t2, f)
@@ -65,28 +65,28 @@ function ConcatTable:updateGradInput(input, gradOutput)
       else
         self.gradInput:add(currentGradInput)
       end
-      end
-   end
-   return self.gradInput
+    end
+  end
+  return self.gradInput
 end
 
 function ConcatTable:accGradParameters(input, gradOutput, scale)
-   scale = scale or 1
-   for i,module in ipairs(self.modules) do
-      module:accGradParameters(input, gradOutput[i], scale)
-   end
+  scale = scale or 1
+  for i,module in ipairs(self.modules) do
+    module:accGradParameters(input, gradOutput[i], scale)
+  end
 end
 
 function ConcatTable:accUpdateGradParameters(input, gradOutput, lr)
-   for i,module in ipairs(self.modules) do
-      module:accUpdateGradParameters(input, gradOutput[i], lr)
-   end
+  for i,module in ipairs(self.modules) do
+    module:accUpdateGradParameters(input, gradOutput[i], lr)
+  end
 end
 
 function ConcatTable:zeroGradParameters()
-   for _,module in ipairs(self.modules) do
-      module:zeroGradParameters()
-   end
+  for _,module in ipairs(self.modules) do
+    module:zeroGradParameters()
+  end
 end
 
 function ConcatTable:__tostring__()
