@@ -20,7 +20,7 @@ function PairwiseDistance:updateOutput(input)
       local diff = self.diff:zero()
       diff:add(input[1], -1, input[2])
       diff:abs()
-
+    
       self.output:resize(input[1]:size(1))
       self.output:zero()
       self.output:add(diff:pow(self.norm):sum(2))
@@ -44,10 +44,10 @@ function PairwiseDistance:updateGradInput(input, gradOutput)
 
   self.gradInput[1] = (self.gradInput[1] or input[1].new()):resize(input[1]:size())
   self.gradInput[2] = (self.gradInput[2] or input[2].new()):resize(input[2]:size())
-   self.gradInput[1]:copy(input[1])
+  self.gradInput[1]:copy(input[1])
    self.gradInput[1]:add(-1, input[2]) 
    
-   if self.norm==1 then
+  if self.norm==1 then
      self.gradInput[1]:apply(mathsign)
    else
      -- Note: derivative of p-norm:
@@ -67,19 +67,19 @@ function PairwiseDistance:updateGradInput(input, gradOutput)
      else
         self.gradInput[1]:mul(math.pow(self.output[1] + 1e-6, -(self.norm-1)))
      end
-   end
+  end
    if input[1]:dim() == 1 then
       self.gradInput[1]:mul(gradOutput[1])
    else
       self.grad = self.grad or gradOutput.new()
       self.ones = self.ones or gradOutput.new()
-
+    
       self.grad:resizeAs(input[1]):zero()
       self.ones:resize(input[1]:size(2)):fill(1)
-
+    
       self.grad:addr(gradOutput, self.ones)
       self.gradInput[1]:cmul(self.grad)
    end
-   self.gradInput[2]:zero():add(-1, self.gradInput[1])
-   return self.gradInput
+  self.gradInput[2]:zero():add(-1, self.gradInput[1])
+  return self.gradInput
 end
