@@ -1280,18 +1280,18 @@ function nntest.Max()
    local err = jac.testJacobian(module,input)
    mytester:assertlt(err,precision, 'error on state ')
 
-   -- negative dimension
-   local module = nn.Max(-1)
-   local input = torch.Tensor({1, 2, 3})
-   local expected = torch.Tensor({3})
-   local output = module:forward(input)
-   mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
-   -- batch
-   local module = nn.Max(1, 1)
-   local input = torch.Tensor({{1, 2, 3},{4, 5, 6}})
-   local expected = torch.Tensor({3, 6})
-   local output = module:forward(input)
-   mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
+-- negative dimension
+local module = nn.Max(-1)
+local input = torch.Tensor({1, 2, 3})
+local expected = torch.Tensor({3})
+local output = module:forward(input)
+mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
+-- batch
+local module = nn.Max(1, 1)
+local input = torch.Tensor({{1, 2, 3},{4, 5, 6}})
+local expected = torch.Tensor({3, 6})
+local output = module:forward(input)
+mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
 
    -- 3D
 local ini = math.random(3,5)
@@ -1317,18 +1317,18 @@ function nntest.Min()
    local err = jac.testJacobian(module,input)
    mytester:assertlt(err,precision, 'error on state ')
 
-   -- negative dimension
-   local module = nn.Min(-1)
-   local input = torch.Tensor({1, 2, 3})
-   local expected = torch.Tensor({1})
-   local output = module:forward(input)
-   mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
-   -- batch
-   local module = nn.Min(1, 1)
-   local input = torch.Tensor({{1, 2, 3},{4, 5, 6}})
-   local expected = torch.Tensor({1, 4})
-   local output = module:forward(input)
-   mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
+-- negative dimension
+local module = nn.Min(-1)
+local input = torch.Tensor({1, 2, 3})
+local expected = torch.Tensor({1})
+local output = module:forward(input)
+mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
+-- batch
+local module = nn.Min(1, 1)
+local input = torch.Tensor({{1, 2, 3},{4, 5, 6}})
+local expected = torch.Tensor({1, 4})
+local output = module:forward(input)
+mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
 
    -- 3D
 local ini = math.random(3,5)
@@ -1354,18 +1354,18 @@ function nntest.Mean()
    local err = jac.testJacobian(module,input)
    mytester:assertlt(err,precision, 'error on state ')
 
-   -- negative dimension
-   local module = nn.Mean(-1)
-   local input = torch.Tensor({1, 2, 3})
-   local expected = torch.Tensor({2})
-   local output = module:forward(input)
-   mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
-   -- batch
-   local module = nn.Mean(1, 1)
-   local input = torch.Tensor({{1, 2, 3},{4, 5, 6}})
-   local expected = torch.Tensor({2, 5})
-   local output = module:forward(input)
-   mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
+-- negative dimension
+local module = nn.Mean(-1)
+local input = torch.Tensor({1, 2, 3})
+local expected = torch.Tensor({2})
+local output = module:forward(input)
+mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
+-- batch
+local module = nn.Mean(1, 1)
+local input = torch.Tensor({{1, 2, 3},{4, 5, 6}})
+local expected = torch.Tensor({2, 5})
+local output = module:forward(input)
+mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
 
    -- 3D
 local ini = math.random(3,5)
@@ -2750,21 +2750,21 @@ function nntest.Sum()
    local err = jac.testJacobian(module,input)
    mytester:assertlt(err,precision, 'error on state ')
 
-   -- negative dimension
-   local module = nn.Sum(-1)
-   local input = torch.Tensor({1, 2, 3})
-   local expected = torch.Tensor({6})
-   local output = module:forward(input)
-   mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
-   -- batch
-   local module = nn.Sum(1, 1)
-   local input = torch.Tensor({{1, 2, 3},{4, 5, 6}})
-   local expected = torch.Tensor({6, 15})
-   local output = module:forward(input)
-   mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
+-- negative dimension
+local module = nn.Sum(-1)
+local input = torch.Tensor({1, 2, 3})
+local expected = torch.Tensor({6})
+local output = module:forward(input)
+mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
+-- batch
+local module = nn.Sum(1, 1)
+local input = torch.Tensor({{1, 2, 3},{4, 5, 6}})
+local expected = torch.Tensor({6, 15})
+local output = module:forward(input)
+mytester:assertlt(torch.norm(output-expected), precision, 'error on forward ')
 
-   local err = jac.testJacobian(module, input)
-   mytester:assertlt(err,precision, 'error on state ')
+local err = jac.testJacobian(module, input)
+mytester:assertlt(err,precision, 'error on state ')
 
    -- 3D
 local ini = math.random(3,5)
