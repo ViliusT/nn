@@ -7,7 +7,7 @@ function Linear:__init(inputSize, outputSize)
   self.bias = torch.Tensor(outputSize)
   self.gradWeight = torch.Tensor(outputSize, inputSize)
   self.gradBias = torch.Tensor(outputSize)
-
+  
   self:reset()
 end
 
@@ -29,7 +29,7 @@ else
   self.bias:uniform(-stdv, stdv)
 end
 
-   return self
+return self
 end
 
 function Linear:updateOutput(input)
@@ -91,6 +91,6 @@ Linear.sharedAccUpdateGradParameters = Linear.accUpdateGradParameters
 
 
 function Linear:__tostring__()
-  return torch.type(self) ..
-      string.format('(%d -> %d)', self.weight:size(2), self.weight:size(1))
+return torch.type(self) ..
+string.format('(%d -> %d)', self.weight:size(2), self.weight:size(1))
 end

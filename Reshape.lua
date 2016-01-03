@@ -65,5 +65,5 @@ end
 
 function Reshape:__tostring__()
   return torch.type(self) .. '(' ..
-      table.concat(self.size:totable(), 'x') .. ')'
+    table.concat(self.size:totable(), 'x') .. ')'
 end
