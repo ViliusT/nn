@@ -1189,18 +1189,18 @@ end
 
 function nntest.ClassNLLCriterion()
    local numLabels = math.random(5,10)
-   local input = torch.rand(numLabels)
+local input = torch.rand(numLabels)
    local target = math.random(1,numLabels)
 
-   -- default ClassNLLCriterion
-   local cri = nn.ClassNLLCriterion()
-   criterionJacobianTest1D(cri, input, target)
+-- default ClassNLLCriterion
+local cri = nn.ClassNLLCriterion()
+criterionJacobianTest1D(cri, input, target)
 
-   -- ClassNLLCriterion with weights
-   local weights = torch.rand(numLabels)
-   weights = weights / weights:sum()
-   cri = nn.ClassNLLCriterion(weights)
-   criterionJacobianTest1D(cri, input, target)
+-- ClassNLLCriterion with weights
+local weights = torch.rand(numLabels)
+weights = weights / weights:sum()
+cri = nn.ClassNLLCriterion(weights)
+criterionJacobianTest1D(cri, input, target)
 end
 
 function nntest.CrossEntropyCriterion()
