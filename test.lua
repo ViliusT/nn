@@ -516,7 +516,7 @@ function nntest.Power()
    local module = nn.Power(2)
    local out = module:forward(in1)
    local err = out:dist(in1:cmul(in1))
-   mytester:assertlt(err, 1e-15, torch.typename(module) .. ' - forward err ')
+    mytester:assertlt(err, 1e-15, torch.typename(module) .. ' - forward err ')
 
    local ini = math.random(3,5)
    local inj = math.random(3,5)
@@ -582,7 +582,7 @@ function nntest.Square()
    local module = nn.Square()
    local out = module:forward(in1)
    local err = out:dist(in1:cmul(in1))
-   mytester:assertlt(err, 1e-15, torch.typename(module) .. ' - forward err ')
+    mytester:assertlt(err, 1e-15, torch.typename(module) .. ' - forward err ')
 
    local ini = math.random(3,5)
    local inj = math.random(3,5)
@@ -604,7 +604,7 @@ function nntest.Sqrt()
    local module = nn.Sqrt()
    local out = module:forward(in1)
    local err = out:dist(in1:sqrt())
-   mytester:assertlt(err, 1e-15, torch.typename(module) .. ' - forward err ')
+    mytester:assertlt(err, 1e-15, torch.typename(module) .. ' - forward err ')
 
    -- Test zero inputs; we will avoid a div-by-zero by setting to zero
    local zin = torch.DoubleTensor(5, 7):zero()
@@ -1162,7 +1162,7 @@ function nntest.WeightedMSECriterion()
 end
 
 function nntest.BCECriterion()
-   local eps = 1e-2
+local eps = 1e-2
    local input = torch.rand(10)*(1-eps) + eps/2
    local target = torch.rand(10)*(1-eps) + eps/2
    local cri = nn.BCECriterion()
@@ -2125,16 +2125,16 @@ function nntest.SpatialConvolutionMap()
 end
 
 function nntest.SpatialFullConvolutionMap()
-   local from = math.random(2,4)
-   local to = math.random(2,5)
-   local fanin = math.random(1, from)
+local from = math.random(2,4)
+local to = math.random(2,5)
+local fanin = math.random(1, from)
    local tt = nn.tables.random(from, to, fanin)
-   local ki = math.random(2,5)
-   local kj = math.random(2,5)
-   local si = math.random(1,3)
-   local sj = math.random(1,3)
-   local ini = math.random(5,7)
-   local inj = math.random(5,7)
+local ki = math.random(2,5)
+local kj = math.random(2,5)
+local si = math.random(1,3)
+local sj = math.random(1,3)
+local ini = math.random(5,7)
+local inj = math.random(5,7)
    local module = nn.SpatialFullConvolutionMap(tt, ki, kj, si, sj)
    local input = torch.Tensor(from, inj, ini):zero()
 
@@ -2181,15 +2181,15 @@ function nntest.SpatialFullConvolutionMap()
 end
 
 function nntest.SpatialFullConvolutionCompare()
-    local from = math.random(2,4)
-    local to = math.random(2,5)
+local from = math.random(2,4)
+local to = math.random(2,5)
     local tt = nn.tables.full(from, to)
-    local ki = math.random(2,5)
-    local kj = math.random(2,5)
-    local si = math.random(1,3)
-    local sj = math.random(1,3)
-    local ini = math.random(7,8)
-    local inj = math.random(7,8)
+local ki = math.random(2,5)
+local kj = math.random(2,5)
+local si = math.random(1,3)
+local sj = math.random(1,3)
+local ini = math.random(7,8)
+local inj = math.random(7,8)
     local module1 = nn.SpatialFullConvolutionMap(tt, ki, kj, si, sj)
     local module2 = nn.SpatialFullConvolution(from, to, ki, kj, si, sj)
     local input = torch.rand(from, inj, ini)
@@ -3452,7 +3452,7 @@ function nntest.PairwiseDistance()
       module:add(nn.PairwiseDistance(p))
 
       local err = jac.testJacobian(module,input)
-      mytester:assertlt(err, 1e-4, ' error on state ')
+mytester:assertlt(err, 1e-4, ' error on state ')
 
       local ferr,berr = jac.testIO(module,input)
       mytester:asserteq(ferr, 0, torch.typename(module)..' - i/o forward err ')
@@ -3474,7 +3474,7 @@ function nntest.PairwiseDistance()
       module:add(nn.PairwiseDistance(p))
 
       err = jac.testJacobian(module,input)
-      mytester:assertlt(err, 1e-4, ' error on state ')
+mytester:assertlt(err, 1e-4, ' error on state ')
 
       -- Also check that the forward prop result is correct.
       -- manually calculate each distance separately
