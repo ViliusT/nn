@@ -48,13 +48,13 @@ function ConcatTable:updateGradInput(input, gradOutput)
             t[k]:copy(v)
           end
         )
-         else
+      else
         retable(self.gradInput, currentGradInput,
           function(t, k, v)
             t[k]:add(v)
           end
         )
-         end
+      end
     end
   else
     self.gradInput = (not wasTable) and self.gradInput or input:clone()
@@ -62,9 +62,9 @@ function ConcatTable:updateGradInput(input, gradOutput)
       local currentGradInput = module:updateGradInput(input, gradOutput[i])
       if i == 1 then
         self.gradInput:resizeAs(currentGradInput):copy(currentGradInput)
-         else
-            self.gradInput:add(currentGradInput)
-         end
+      else
+        self.gradInput:add(currentGradInput)
+      end
       end
    end
    return self.gradInput

@@ -310,7 +310,7 @@ function Module:findModules(typename, container)
       for i = 1, #self.modules do
         local child = self.modules[i]
         local cur_nodes, cur_containers =
-          child:findModules(typename, self)
+        child:findModules(typename, self)
         assert(#cur_nodes == #cur_containers,
           'Internal error: incorrect return length')  -- This shouldn't happen
         -- add the list items from our child to our list (ie return a

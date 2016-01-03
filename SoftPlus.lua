@@ -7,17 +7,17 @@ function SoftPlus:__init(beta)
 end
 
 function SoftPlus:updateOutput(input)
-   -- f(x) = 1/beta * log(1 + exp(beta * x))
-   input.nn.SoftPlus_updateOutput(self, input)
-   return self.output
+  -- f(x) = 1/beta * log(1 + exp(beta * x))
+  input.nn.SoftPlus_updateOutput(self, input)
+  return self.output
 end
 
 function SoftPlus:updateGradInput(input, gradOutput)
-   -- d/dx[log(1+exp(k*x))/k] = exp(kx) / (exp(kx) + 1)
-   -- SINCE
-   -- y = (1/k)*log(1+exp(k*x)) --> x = (1/k)*log(exp(k*y)-1)
-   -- THEREFORE:
-   -- d/dx(f(x)) = (exp(k*y) - 1) / exp(k*y)
-   input.nn.SoftPlus_updateGradInput(self, input, gradOutput)
-   return self.gradInput
+  -- d/dx[log(1+exp(k*x))/k] = exp(kx) / (exp(kx) + 1)
+  -- SINCE
+  -- y = (1/k)*log(1+exp(k*x)) --> x = (1/k)*log(exp(k*y)-1)
+  -- THEREFORE:
+  -- d/dx(f(x)) = (exp(k*y) - 1) / exp(k*y)
+  input.nn.SoftPlus_updateGradInput(self, input, gradOutput)
+  return self.gradInput
 end

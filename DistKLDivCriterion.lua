@@ -6,9 +6,9 @@ function DistKLDivCriterion:__init()
 end
 
 function DistKLDivCriterion:updateOutput(input, target)
-   return input.nn.DistKLDivCriterion_updateOutput(self, input, target)  
+  return input.nn.DistKLDivCriterion_updateOutput(self, input, target)
 end
 
 function DistKLDivCriterion:updateGradInput(input, target)
-   return input.nn.DistKLDivCriterion_updateGradInput(self, input, target)
+  return input.nn.DistKLDivCriterion_updateGradInput(self, input, target)
 end

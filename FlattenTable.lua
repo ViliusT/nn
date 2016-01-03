@@ -2,7 +2,7 @@ local FlattenTable, parent = torch.class('nn.FlattenTable', 'nn.Module')
 
 function FlattenTable:__init()
   parent.__init(self)
-
+  
   self.output = {}
   self.input_map = {}
   self.gradInput = {}
@@ -11,7 +11,7 @@ end
 -- Recursive function to flatten a table (output is a table)
 local function flatten(output, input)
   local input_map  -- has the same structure as input, but stores the
-                   -- indices to the corresponding output
+  -- indices to the corresponding output
   if type(input) == 'table' then
     input_map = {}
     -- forward DFS order
@@ -85,7 +85,7 @@ function FlattenTable:updateGradInput(input, gradOutput)
   -- If the input changes between the updateOutput and updateGradInput call,
   -- then we may have to rebuild the input_map!  However, let's assume that
   -- the input_map is valid and that forward has already been called.
-
+  
   -- However, we should check that the gradInput is valid:
   if not checkMapping(gradOutput, self.gradInput, self.input_map) then
     self.gradInput = inverseFlatten(gradOutput, self.input_map)

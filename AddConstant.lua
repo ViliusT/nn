@@ -22,7 +22,7 @@ function AddConstant:updateOutput(input)
     self.output:add(self.constant_scalar)
   end
   return self.output
-end 
+end
 
 function AddConstant:updateGradInput(input, gradOutput)
   if self.inplace then
