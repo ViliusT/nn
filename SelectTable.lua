@@ -54,5 +54,5 @@ end
 function SelectTable:type(type, tensorCache)
   self.gradInput = {}
   self.output = {}
-   return parent.type(self, type, tensorCache)
+  return parent.type(self, type, tensorCache)
 end

@@ -124,5 +124,5 @@ function CMul:type(type, tensorCache)
     self._repeat = nil
     self._sum = nil
   end
-   return parent.type(self, type, tensorCache)
+  return parent.type(self, type, tensorCache)
 end

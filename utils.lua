@@ -3,17 +3,17 @@ nn.utils = {}
 -- oops; someone forgot to add torch.Storage.type
 -- TODO replace with torch.Storage.type when implemented
 local function torch_Storage_type(self, type)
-   local current = torch.typename(self)
-   if not type then return current end
-   if type ~= current then
-      local new = torch.getmetatable(type).new()
-      if self:size() > 0 then
-         new:resize(self:size()):copy(self)
-      end
-      return new
-   else
-      return self
-   end
+  local current = torch.typename(self)
+if not type then return current end
+  if type ~= current then
+    local new = torch.getmetatable(type).new()
+    if self:size() > 0 then
+      new:resize(self:size()):copy(self)
+    end
+    return new
+  else
+    return self
+  end
 end
 
 -- tensorCache maintains a list of all tensors and storages that have been
@@ -34,42 +34,42 @@ end
 -- tensor keys are stored as actual tensor objects, while storage
 -- keys are stored as the pointers themselves (as numbers).
 function nn.utils.recursiveType(param, type, tensorCache)
-   tensorCache = tensorCache or {}
-
+  tensorCache = tensorCache or {}
+  
   if torch.type(param) == 'table' then
     for k, v in pairs(param) do
-         param[k] = nn.utils.recursiveType(v, type, tensorCache)
+      param[k] = nn.utils.recursiveType(v, type, tensorCache)
     end
   elseif torch.isTypeOf(param, 'nn.Module') or
     torch.isTypeOf(param, 'nn.Criterion') then
-      param:type(type, tensorCache)
+    param:type(type, tensorCache)
   elseif torch.isTensor(param) then
-      if torch.typename(param) ~= type then
-         local newparam
-         if tensorCache[param] then
-            newparam = tensorCache[param]
-         else
-            newparam = torch.Tensor():type(type)
-            local storageType = type:gsub('Tensor','Storage')
-            if param:storage() then
-               local storage_key = torch.pointer(param:storage())
-               if not tensorCache[storage_key] then
-                  tensorCache[storage_key] = torch_Storage_type(
-                        param:storage(), storageType)
-               end
-               assert(torch.type(tensorCache[storage_key]) == storageType)
-               newparam:set(
-                  tensorCache[storage_key],
-                  param:storageOffset(),
-                  param:size(),
-                  param:stride()
-               )
-               tensorCache[param] = newparam
-            end
-         end
-         assert(torch.type(newparam) == type)
-         param = newparam
+    if torch.typename(param) ~= type then
+      local newparam
+      if tensorCache[param] then
+        newparam = tensorCache[param]
+      else
+        newparam = torch.Tensor():type(type)
+        local storageType = type:gsub('Tensor','Storage')
+        if param:storage() then
+          local storage_key = torch.pointer(param:storage())
+          if not tensorCache[storage_key] then
+            tensorCache[storage_key] = torch_Storage_type(
+              param:storage(), storageType)
+          end
+          assert(torch.type(tensorCache[storage_key]) == storageType)
+          newparam:set(
+            tensorCache[storage_key],
+            param:storageOffset(),
+            param:size(),
+            param:stride()
+          )
+          tensorCache[param] = newparam
+        end
       end
+      assert(torch.type(newparam) == type)
+      param = newparam
+    end
   end
   return param
 end

@@ -99,7 +99,7 @@ function Normalize:updateGradInput(input, gradOutput)
   self.buffer2 = self.buffer2 or input.new() -- nxd
   self.buffer2:cmul(input, gradOutput)
   self.cross:sum(self.buffer2, 2)
-
+  
   self.buffer:cmul(self.cross:expandAs(self.buffer))
   self._gradInput:add(-1, self.buffer)
   

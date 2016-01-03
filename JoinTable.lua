@@ -66,5 +66,5 @@ end
 
 function JoinTable:type(type, tensorCache)
   self.gradInput = {}
-   return parent.type(self, type, tensorCache)
+  return parent.type(self, type, tensorCache)
 end

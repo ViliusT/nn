@@ -226,7 +226,7 @@ function WeightedEuclidean:type(type, tensorCache)
     self._repeat2 = nil
     self._repeat3 = nil
   end
-   return parent.type(self, type, tensorCache)
+  return parent.type(self, type, tensorCache)
 end
 
 function WeightedEuclidean:parameters()

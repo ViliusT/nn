@@ -186,5 +186,5 @@ if type then
   self._repeat = nil
   self._repeat2 = nil
 end
-   return parent.type(self, type, tensorCache)
+return parent.type(self, type, tensorCache)
 end

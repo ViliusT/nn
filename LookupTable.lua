@@ -72,7 +72,7 @@ function LookupTable:accGradParameters(input, gradOutput, scale)
 end
 
 function LookupTable:type(type, tensorCache)
-   parent.type(self, type, tensorCache)
+  parent.type(self, type, tensorCache)
   
   if type == 'torch.CudaTensor' then
     -- CUDA uses _sorted and _indices temporary tensors

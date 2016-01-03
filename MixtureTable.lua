@@ -154,5 +154,5 @@ function MixtureTable:type(type, tensorCache)
   self._sum = nil
   self._expert2 = nil
   self._expertView2 = nil
-   return parent.type(self, type, tensorCache)
+  return parent.type(self, type, tensorCache)
 end

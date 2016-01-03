@@ -38,5 +38,5 @@ function Copy:type(type, tensorCache)
   if type and self.dontCast then
     return self
   end
-   return parent.type(self, type, tensorCache)
+  return parent.type(self, type, tensorCache)
 end
