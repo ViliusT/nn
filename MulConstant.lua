@@ -6,10 +6,10 @@ function MulConstant:__init(constant_scalar,ip)
   self.constant_scalar = constant_scalar
 
   -- default for inplace is false
-   self.inplace = ip or false
-   if (ip and type(ip) ~= 'boolean') then
-      error('in-place flag must be boolean')
-   end
+  self.inplace = ip or false
+  if (ip and type(ip) ~= 'boolean') then
+    error('in-place flag must be boolean')
+  end
 end
 
 function MulConstant:updateOutput(input)

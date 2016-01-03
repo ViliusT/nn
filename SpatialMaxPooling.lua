@@ -11,10 +11,10 @@ function SpatialMaxPooling:__init(kW, kH, dW, dH, padW, padH)
    self.dW = dW
    self.dH = dH
 
-   self.padW = padW or 0
-   self.padH = padH or 0
-
-   self.ceil_mode = false
+  self.padW = padW or 0
+  self.padH = padH or 0
+  
+  self.ceil_mode = false
    self.indices = torch.Tensor()
 end
 
@@ -29,10 +29,10 @@ function SpatialMaxPooling:floor()
 end
 
 function SpatialMaxPooling:updateOutput(input)
-   -- backward compatibility
-   self.ceil_mode = self.ceil_mode or false
-   self.padW = self.padW or 0
-   self.padH = self.padH or 0
+  -- backward compatibility
+  self.ceil_mode = self.ceil_mode or false
+  self.padW = self.padW or 0
+  self.padH = self.padH or 0
    input.nn.SpatialMaxPooling_updateOutput(self, input)
    return self.output
 end
@@ -52,12 +52,12 @@ function SpatialMaxPooling:empty()
 end
 
 function SpatialMaxPooling:__tostring__()
-   local s =  string.format('%s(%d,%d,%d,%d', torch.type(self),
-                            self.kW, self.kH, self.dW, self.dH)
-   if (self.padW or self.padH) and (self.padW ~= 0 or self.padH ~= 0) then
+  local s =  string.format('%s(%d,%d,%d,%d', torch.type(self),
+      self.kW, self.kH, self.dW, self.dH)
+    if (self.padW or self.padH) and (self.padW ~= 0 or self.padH ~= 0) then
       s = s .. ',' .. self.padW .. ','.. self.padH
-   end
-   s = s .. ')'
-
-   return s
+    end
+    s = s .. ')'
+  
+  return s
 end

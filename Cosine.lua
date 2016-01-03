@@ -159,5 +159,5 @@ function Cosine:type(type, tensorCache)
       self._gradOutput = nil
       self._sum = nil
    end
-   return parent.type(self, type, tensorCache)
+  return parent.type(self, type, tensorCache)
 end

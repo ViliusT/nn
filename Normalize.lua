@@ -14,19 +14,19 @@ function Normalize:updateOutput(input)
   if input:dim() == 1 then
     input = input:view(1,-1)
   end
-
+  
   self._output = self._output or input.new()
   self.norm = self.norm or input.new()
   self.buffer = self.buffer or input.new()
-
+  
   self._output:resizeAs(input)
 
   if self.p == math.huge then
     -- specialization for the infinity norm
     self._indices = self._indices or
-      (torch.type(self.output) == 'torch.CudaTensor' and
-       torch.CudaTensor() or torch.LongTensor())
-
+    (torch.type(self.output) == 'torch.CudaTensor' and
+      torch.CudaTensor() or torch.LongTensor())
+    
     self.buffer:abs(input)
     torch.max(self.norm, self._indices, self.buffer, 2)
     self.norm:add(self.eps)
@@ -41,7 +41,7 @@ function Normalize:updateOutput(input)
     self.norm:pow(self.normp,1/self.p)
   end
   self._output:cdiv(input, self.norm:view(-1,1):expandAs(input))
-
+  
   self.output = self._output:view(input_size)
   return self.output
 end
@@ -49,15 +49,15 @@ end
 function Normalize:updateGradInput(input, gradOutput)
   assert(input:dim() <= 2, 'only 1d layer supported')
   assert(gradOutput:dim() <= 2, 'only 1d layer supported')
-
+  
   local input_size = input:size()
   if input:dim() == 1 then
     input = input:view(1,-1)
   end
-
+  
   local n = input:size(1) -- batch size
   local d = input:size(2) -- dimensionality of vectors
-
+  
   self._gradInput = self._gradInput or input.new()
   self.cross = self.cross or input.new()
   -- compute diagonal term with gradOutput
@@ -92,7 +92,7 @@ function Normalize:updateGradInput(input, gradOutput)
   end
   -- compute cross term in two steps
   self.cross:resize(n,1)
-
+  
   -- instead of having a huge temporary matrix (b1*b2),
   -- do the computations as b1*(b2*gradOutput). This avoids redundant
   -- computation and also a huge buffer of size n*d^2
@@ -102,7 +102,7 @@ function Normalize:updateGradInput(input, gradOutput)
 
   self.buffer:cmul(self.cross:expandAs(self.buffer))
   self._gradInput:add(-1, self.buffer)
-
+  
   -- reuse cross buffer for normalization
   if self.p == math.huge then
     self.cross:cmul(self.norm,self.norm)
@@ -110,7 +110,7 @@ function Normalize:updateGradInput(input, gradOutput)
     self.cross:cmul(self.normp,self.norm)
   end
   self._gradInput:cdiv(self.cross:expand(n,d))
-
+  
   self.gradInput = self._gradInput:view(input_size)
   return self.gradInput
 end

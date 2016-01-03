@@ -13,8 +13,8 @@ function SpatialConvolution:__init(nInputPlane, nOutputPlane, kW, kH, dW, dH, pa
 
    self.dW = dW
    self.dH = dH
-   self.padW = padW or 0
-   self.padH = padH or self.padW
+  self.padW = padW or 0
+  self.padH = padH or self.padW
 
    self.weight = torch.Tensor(nOutputPlane, nInputPlane, kH, kW)
    self.bias = torch.Tensor(nOutputPlane)
@@ -46,14 +46,14 @@ end
 local function backCompatibility(self)
    self.finput = self.finput or self.weight.new()
    self.fgradInput = self.fgradInput or self.weight.new()
-   if self.padding then
-      self.padW = self.padding
-      self.padH = self.padding
-      self.padding = nil
-   else
-      self.padW = self.padW or 0
-      self.padH = self.padH or 0
-   end
+if self.padding then
+self.padW = self.padding
+self.padH = self.padding
+self.padding = nil
+else
+self.padW = self.padW or 0
+self.padH = self.padH or 0
+end
    if self.weight:dim() == 2 then
       self.weight = self.weight:view(self.nOutputPlane, self.nInputPlane, self.kH, self.kW)
    end
@@ -125,7 +125,7 @@ end
 function SpatialConvolution:type(type,tensorCache)
    self.finput = torch.Tensor()
    self.fgradInput = torch.Tensor()
-   return parent.type(self,type,tensorCache)
+return parent.type(self,type,tensorCache)
 end
 
 function SpatialConvolution:__tostring__()
@@ -135,7 +135,7 @@ function SpatialConvolution:__tostring__()
      s = s .. string.format(', %d,%d', self.dW, self.dH)
    end
    if (self.padW or self.padH) and (self.padW ~= 0 or self.padH ~= 0) then
-     s = s .. ', ' .. self.padW .. ',' .. self.padH
+  s = s .. ', ' .. self.padW .. ',' .. self.padH
    end
    return s .. ')'
 end

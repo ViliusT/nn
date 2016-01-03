@@ -13,8 +13,8 @@ function SpatialConvolutionMM:__init(nInputPlane, nOutputPlane, kW, kH, dW, dH, 
 
    self.dW = dW
    self.dH = dH
-   self.padW = padW or 0
-   self.padH = padH or self.padW
+  self.padW = padW or 0
+  self.padH = padH or self.padW
 
    self.weight = torch.Tensor(nOutputPlane, nInputPlane*kH*kW)
    self.bias = torch.Tensor(nOutputPlane)
@@ -63,12 +63,12 @@ local function makeContiguous(self, input, gradOutput)
 end
 
 function SpatialConvolutionMM:updateOutput(input)
-   -- backward compatibility
-   if self.padding then
-      self.padW = self.padding
-      self.padH = self.padding
-      self.padding = nil
-   end
+-- backward compatibility
+if self.padding then
+self.padW = self.padding
+self.padH = self.padding
+self.padding = nil
+end
    input = makeContiguous(self, input)
    return input.nn.SpatialConvolutionMM_updateOutput(self, input)
 end
@@ -88,7 +88,7 @@ end
 function SpatialConvolutionMM:type(type,tensorCache)
    self.finput = torch.Tensor()
    self.fgradInput = torch.Tensor()
-   return parent.type(self,type,tensorCache)
+return parent.type(self,type,tensorCache)
 end
 
 function SpatialConvolutionMM:__tostring__()
@@ -98,7 +98,7 @@ function SpatialConvolutionMM:__tostring__()
      s = s .. string.format(', %d,%d', self.dW, self.dH)
    end
    if (self.padW or self.padH) and (self.padW ~= 0 or self.padH ~= 0) then
-     s = s .. ', ' .. self.padW .. ',' .. self.padH
+  s = s .. ', ' .. self.padW .. ',' .. self.padH
    end
    return s .. ')'
 end
