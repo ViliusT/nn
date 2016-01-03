@@ -6,24 +6,24 @@ function CosineDistance:__init()
 end 
 
 local function makeContiguous(self, input1, input2)
-   if not input1:isContiguous() then
-      self._input1 = self._input1 or input1.new()
-      self._input1:resizeAs(input1):copy(input1)
-      input1 = self._input1
-   end
-   if not input2:isContiguous() then
-      self._input2 = self._input2 or input2.new()
-      self._input2:resizeAs(input2):copy(input2)
-      input2 = self._input2
-   end
-   return input1, input2
+  if not input1:isContiguous() then
+    self._input1 = self._input1 or input1.new()
+    self._input1:resizeAs(input1):copy(input1)
+    input1 = self._input1
+  end
+  if not input2:isContiguous() then
+    self._input2 = self._input2 or input2.new()
+    self._input2:resizeAs(input2):copy(input2)
+    input2 = self._input2
+  end
+  return input1, input2
 end
 
 function CosineDistance:updateOutput(input)
    local input1, input2 = input[1], input[2]
   
-   input1, input2 = makeContiguous(self, input1, input2)
-   
+  input1, input2 = makeContiguous(self, input1, input2)
+  
   if input1:dim() == 1 then
     input1 = input1:view(1,-1)
     input2 = input2:view(1,-1)
@@ -64,9 +64,9 @@ function CosineDistance:updateGradInput(input, gradOutput)
    local v1  = input[1]
    local v2  = input[2]
   local not_batch = false
-   
-   v1, v2 = makeContiguous(self, v1, v2)
-   
+  
+  v1, v2 = makeContiguous(self, v1, v2)
+  
   if v1:dim() == 1 then
     v1 = v1:view(1,-1)
     v2 = v2:view(1,-1)
