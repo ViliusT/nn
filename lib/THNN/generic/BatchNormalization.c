@@ -1,43 +1,33 @@
 #ifndef TH_GENERIC_FILE
-#define TH_GENERIC_FILE "generic/SpatialBatchNormalization.c"
+#define TH_GENERIC_FILE "generic/BatchNormalization.c"
 #else
 
-static int nn_(SpatialBatchNormalization_updateOutput)(lua_State *L)
+void THNN_(BatchNormalization_updateOutput)(
+  THNNState *state, THTensor *input, THTensor *output,
+  THTensor *weight, THTensor *bias,
+  THTensor *running_mean, THTensor *running_var,
+  THTensor *save_mean, THTensor *save_std,
+  bool train, double momentum, double eps)
 {
-  THTensor *input = luaT_checkudata(L, 1, torch_Tensor);
-  THTensor *output = luaT_checkudata(L, 2, torch_Tensor);
-  THTensor *weight = luaT_toudata(L, 3, torch_Tensor);
-  THTensor *bias = luaT_toudata(L, 4, torch_Tensor);
-  int train = lua_toboolean(L, 5);
-  double eps = lua_tonumber(L, 6);
-  double momentum = lua_tonumber(L, 7);
-  THTensor *running_mean = luaT_checkudata(L, 8, torch_Tensor);
-  THTensor *running_var = luaT_checkudata(L, 9, torch_Tensor);
-  THTensor *save_mean = luaT_toudata(L, 10, torch_Tensor);
-  THTensor *save_std = luaT_toudata(L, 11, torch_Tensor);
-
-  long nBatch = THTensor_(size)(input, 0);
-  long nFeature = THTensor_(size)(input, 1);
-  long iH = THTensor_(size)(input, 2);
-  long iW = THTensor_(size)(input, 3);
-  long n = nBatch * iH * iW;
+  long nInput = THTensor_(size)(input, 1);
+  long n = THTensor_(nElement)(input) / nInput;
 
   #pragma parallel for
-  for (long f = 0; f < nFeature; ++f) {
+  for (long f = 0; f < nInput; ++f) {
     THTensor *in = THTensor_(newSelect)(input, 1, f);
     THTensor *out = THTensor_(newSelect)(output, 1, f);
 
     real mean, invstd;
 
     if (train) {
-      // compute mean per feature plane
+      // compute mean per input
       accreal sum = 0;
       TH_TENSOR_APPLY(real, in, sum += *in_data;);
 
       mean = (real) sum / n;
       THTensor_(set1d)(save_mean, f, (real) mean);
 
-      // compute variance per feature plane
+      // compute variance per input
       sum = 0;
       TH_TENSOR_APPLY(real, in,
         sum += (*in_data - mean) * (*in_data - mean););
@@ -71,34 +61,22 @@ static int nn_(SpatialBatchNormalization_updateOutput)(lua_State *L)
     THTensor_(free)(out);
     THTensor_(free)(in);
   }
-
-  return 0;
 }
 
-static int nn_(SpatialBatchNormalization_backward)(lua_State *L)
+void THNN_(BatchNormalization_backward)(
+  THNNState *state, THTensor *input, THTensor *gradOutput, THTensor *gradInput,
+  THTensor *gradWeight, THTensor *gradBias, THTensor *weight,
+  THTensor *save_mean, THTensor *save_std, double scale)
 {
-  THTensor *input = luaT_checkudata(L, 1, torch_Tensor);
-  THTensor *gradOutput = luaT_checkudata(L, 2, torch_Tensor);
-  THTensor *gradInput = luaT_toudata(L, 3, torch_Tensor);
-  THTensor *gradWeight = luaT_toudata(L, 4, torch_Tensor);
-  THTensor *gradBias = luaT_toudata(L, 5, torch_Tensor);
-  THTensor *weight = luaT_toudata(L, 6, torch_Tensor);
-  THTensor *save_mean = luaT_toudata(L, 7, torch_Tensor);
-  THTensor *save_std = luaT_toudata(L, 8, torch_Tensor);
-  double scale = lua_tonumber(L, 9);
-
-  long nBatch = THTensor_(size)(input, 0);
-  long nFeature = THTensor_(size)(input, 1);
-  long iH = THTensor_(size)(input, 2);
-  long iW = THTensor_(size)(input, 3);
-  long n = nBatch * iH * iW;
+  long nInput = THTensor_(size)(input, 1);
+  long n = THTensor_(nElement)(input) / nInput;
 
   // Q(X) = X - E[x] ; i.e. input centered to zero mean
   // Y = Q(X) / σ    ; i.e. BN output before weight and bias
-  // dL/dX = (Q(dL/dY) - dot(Y, dL/dY) * Y) / σ
+  // dL/dX = (Q(dL/dY) - dot(Y, dL/dY) * Y) / σ * w
 
   #pragma parallel for
-  for (long f = 0; f < nFeature; ++f) {
+  for (long f = 0; f < nInput; ++f) {
     THTensor *in = THTensor_(newSelect)(input, 1, f);
     THTensor *gradOut = THTensor_(newSelect)(gradOutput, 1, f);
     real mean = THTensor_(get1d)(save_mean, f);
@@ -142,21 +120,6 @@ static int nn_(SpatialBatchNormalization_backward)(lua_State *L)
     THTensor_(free)(gradOut);
     THTensor_(free)(in);
   }
-
-  return 0;
-}
-
-static const struct luaL_Reg nn_(SpatialBatchNormalization__) [] = {
-  {"SpatialBatchNormalization_updateOutput", nn_(SpatialBatchNormalization_updateOutput)},
-  {"SpatialBatchNormalization_backward", nn_(SpatialBatchNormalization_backward)},
-  {NULL, NULL}
-};
-
-static void nn_(SpatialBatchNormalization_init)(lua_State *L)
-{
-  luaT_pushmetatable(L, torch_Tensor);
-  luaT_registeratname(L, nn_(SpatialBatchNormalization__), "nn");
-  lua_pop(L,1);
 }
 
 #endif

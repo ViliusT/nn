@@ -470,6 +470,64 @@ TH_API void THNN_(TemporalSubSampling_accGradParameters)(
           int kW, int dW,
           real scale);
 
+TH_API void THNN_(BatchNormalization_updateOutput)(
+          THNNState *state,
+          THTensor *input,
+          THTensor *output,
+          THTensor *weight,
+          THTensor *bias,
+          THTensor *running_mean,
+          THTensor *running_var,
+          THTensor *save_mean,
+          THTensor *save_std,
+          bool train,
+          double momentum,
+          double eps);
+TH_API void THNN_(BatchNormalization_backward)(
+          THNNState *state,
+          THTensor *input,
+          THTensor *gradOutput,
+          THTensor *gradInput,
+          THTensor *gradWeight,
+          THTensor *gradBias,
+          THTensor *weight,
+          THTensor *save_mean,
+          THTensor *save_std,
+          double scale);
+
+TH_API void THNN_(SpatialConvolutionMap_updateOutput)(
+          THNNState *state,       // library state
+          THTensor *input,        // input tensor
+          THTensor *output,       // [OUT] convolution output
+          THTensor *weight,       // 3D weight tensor (connTable:size(1) x kH x kW)
+          THTensor *bias,         // 1D bias tensor (nOutputPlane)
+          THTensor *connTable,    // connection table
+          int nInputPlane,        // number of input planes
+          int nOutputPlane,       // number of output planes
+          int dW, int dH);        // stride
+TH_API void THNN_(SpatialConvolutionMap_updateGradInput)(
+          THNNState *state,       // library state
+          THTensor *input,        // input tensor
+          THTensor *gradOutput,   // gradient w.r.t. output
+          THTensor *gradInput,    // [OUT] gradient w.r.t. input
+          THTensor *weight,       // 3D weight tensor (connTable:size(1) x kH x kW)
+          THTensor *bias,         // 1D bias tensor (nOutputPlane)
+          THTensor *connTable,    // connection table
+          int nInputPlane,        // number of input planes
+          int nOutputPlane,       // number of output planes
+          int dW, int dH);        // stride
+TH_API void THNN_(SpatialConvolutionMap_accGradParameters)(
+          THNNState *state,       // library state
+          THTensor *input,        // input tensor
+          THTensor *gradOutput,   // gradient w.r.t. output
+          THTensor *gradWeight,   // 3D gradWeight tensor (connTable:size(1) x kH x kW)
+          THTensor *gradBias,     // 1D gradBias tensor (nOutputPlane)
+          THTensor *connTable,    // connection table
+          int nInputPlane,        // number of input planes
+          int nOutputPlane,       // number of output planes
+          int dW, int dH,         // stride
+          real scale);            // scaling factor
+
 TH_API void THNN_(SpatialConvolutionMM_updateOutput)(
           THNNState *state,
           THTensor *input,
