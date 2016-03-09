@@ -47,14 +47,16 @@ TH_API void THNN_(ELU_updateOutput)(
           THNNState *state,
           THTensor *input,
           THTensor *output,
-          real alpha);
+          real alpha,
+          bool inplace);
 TH_API void THNN_(ELU_updateGradInput)(
           THNNState *state,
           THTensor *input,
           THTensor *gradOutput,
           THTensor *gradInput,
           THTensor *output,
-          real alpha);
+          real alpha,
+          bool inplace);
 
 TH_API void THNN_(DistKLDivCriterion_updateOutput)(
           THNNState *state,

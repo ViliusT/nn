@@ -43,17 +43,19 @@ TH_API void THNN_(ClassNLLCriterion_updateGradInput)(
           THTensor *total_weight);
 
 TH_API void THNN_(ELU_updateOutput)(
-          THNNState *state,
-          THTensor *input,
-          THTensor *output,
-          real alpha);
+          THNNState *state,            // library's state
+          THTensor *input,             // input tensor
+          THTensor *output,            // [OUT] ELU output
+          real alpha,                  // an ELU parameter (as in paper)
+          bool inplace);               // if true, modifies gradOutput and sets gradInput onto it (no additional memory is allocated)
 TH_API void THNN_(ELU_updateGradInput)(
-          THNNState *state,
-          THTensor *input,
-          THTensor *gradOutput,
-          THTensor *gradInput,
-          THTensor *output,
-          real alpha);
+          THNNState *state,            // library's state
+          THTensor *input,             // input tensor
+          THTensor *gradOutput,        // gradient w.r.t. output
+          THTensor *gradInput,         // [OUT] gradient w.r.t. input
+          THTensor *output,            // output from a forward pass
+          real alpha,                  // an ELU parameter (as in paper)
+          bool inplace);               // if true, modifies gradOutput and sets gradInput onto it (no additional memory is allocated)
 
 TH_API void THNN_(DistKLDivCriterion_updateOutput)(
           THNNState *state,
