@@ -401,6 +401,31 @@ TH_API void THNN_(Threshold_updateGradInput)(
           real threshold,
           bool inplace);
 
+TH_API void THNN_(SpatialBatchNormalization_updateOutput)(
+          THNNState *state,
+          THTensor *input,
+          THTensor *output,
+          THTensor *weight,
+          THTensor *bias,
+          THTensor *running_mean,
+          THTensor *running_var,
+          THTensor *save_mean,
+          THTensor *save_std,
+          bool train,
+          double momentum,
+          double eps);
+TH_API void THNN_(SpatialBatchNormalization_backward)(
+          THNNState *state,
+          THTensor *input,
+          THTensor *gradOutput,
+          THTensor *gradInput,
+          THTensor *gradWeight,
+          THTensor *gradBias,
+          THTensor *weight,
+          THTensor *save_mean,
+          THTensor *save_std,
+          double scale);
+
 TH_API void THNN_(SpatialConvolutionMM_updateOutput)(
           THNNState *state,
           THTensor *input,
