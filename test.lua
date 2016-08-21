@@ -4388,10 +4388,10 @@ function nntest.Reshape()
 
    -- Minibatch
    local minibatch = torch.rand(5,10)
-   mytester:assertTableEq(module:forward(minibatch):size(1),
+   mytester:asserteq(module:forward(minibatch):size(1),
       minibatch:size(1),
       "Error in minibatch dimension")
-   mytester:assertTableEq(module:forward(minibatch):nElement(),
+   mytester:asserteq(module:forward(minibatch):nElement(),
       minibatch:nElement(),
       "Error in minibatch nElement")
 end
